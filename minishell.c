@@ -6,47 +6,57 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/04/08 11:16:54 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/04/10 15:51:24 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "libft/libft.h"
 
-int ft_strlen(char *str)
+void free_split(char **split)
 {
-	int i = -1;
-	while (str[i++]);
-	return (i);
+	int i;
+
+	i = 0;
+	while (split[i] != NULL)
+	{
+		free(split[i]);
+		i++;
+	}
+	free(split);
 }
 
-char *ft_strjoin(char *s1, char *s2)
+int ft_check_command(char *path, char *line)
 {
-	char *str = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-	int i = 0;
-	int j = 0;
-	while (s1[i] != '\0')
+	char *command;
+
+	command = ft_strjoin(path, line);
+	if (access(command, F_OK) == 0)
 	{
-		str[i] = s1[i];
-		i++;
+		free(command);
+		return (1);
 	}
-	while (s2[j] != '\0')
-	{
-		str[i] = s2[j];
-		j++;
-		i++;
-	}
-	str[i] = '\0';
-	return (str);
+	free(command);
+	return (0);
 }
 
 int main(void)
 {
 	char *line;
-	while (1)
+	char *prompt;
+	char *cmd;
+
+	prompt = ft_strdup("minishell$ ");
+	line = readline(prompt);
+	while (line != NULL)
 	{
-		line = readline("minishell$ ");
-		printf("%s\n", line);
+		// printf("%s\n", line);
+		add_history(line);
+		cmd = conv_to_cmd(line);
+		printf("%s\n", cmd);
+		free(cmd);
 		free(line);
+		line = readline(prompt);
 	}
 	return (0);
 }

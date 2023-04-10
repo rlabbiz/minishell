@@ -33,6 +33,13 @@ Functions:
 		options: the `options` argument specifies various options for the `waitpid` function. the commonly used options are `WUNTRACED` and `WCONTINUED`, which respectively cause `waitpid` to return when a child process is stopped or continued.
 		RETURN: the return value of `waitpid` is the process ID of child process that change state, or -1 if an error accurred.
 
+	-> wait3 :
+		in C programming, `wait3` is a sistem call used to wait for any child process to terminate and retrieve information about its resource usage. the `wait3` fucntion is similar to `waitpid`, but provides additional information about child process's resource usage. 
+			``` pid_t wait3(int *status, int options, struct rusage *usage) ```
+		status: a pointer to an integer where the status of the terminated child process is stored.
+		options: a set of options that control the behavior of the function. the option can include `WNOHANG` to return immediately if no child process has terminated, `WUNTRACED` to report the status of child processes that have been stopped, and `WCONTTNUED` to report the status of child processes that have benn resumed.
+		usage: a pointer to a `struct rusage` the stores information about the resources used by the child process.
+
 	-> execve :
 		`execve` is a function in C that allows a process to replace its current program image with a new one. it is often used to execute a different program, with different arguments and environment variables.
 			``` int execve(const char *path, char * const argv[], char * const envp[]) ```
@@ -61,3 +68,13 @@ Functions:
 			``` void rl_replace_line(const char *new_input, int flag) ```
 		new_input: replace the `prompt` of `readline` function with `new_input`.
 		flag: I dont know it, but pass 0 to it.
+
+	-> rl_on_new_line :
+		`rl_on_new_line` is a fucntion provided by the `readline` library in C, which used to move the cursor to the beginning of a new line.
+			``` void rl_on_new_line(void) ```
+	
+	-> rl_redisplay : 
+		`rl_redisplay` is a fucntion provided by the `readline` library in C that allows you to force the display to be update with the current input line. this can be useful when you need to modify the input line in response to some event or condition, and you want to make sure that the update input line is immediately displayed to the user.
+			``` void rl_redisplay() ```
+	
+

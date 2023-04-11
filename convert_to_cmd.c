@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:44:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/04/11 16:56:06 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/04/11 21:34:37 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int skip_esp_tab(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i] != '\0' && (str[i] == ' ' || str[i] == '\t'))
+	while (str[i] != '\0' && str[i] == ' ')
 		i++;
 	return (i);
 }
@@ -112,46 +112,66 @@ int	check_quotes(char *input)
 	return (-1);
 }
 
+int get_cmd_len(char *input)
+{
+	int	i;
+	int	len;
+	int	quotes;
+
+	i = 0;
+	len = 0;
+	quotes = 0;
+	while ((input[i] == ' ' || input[i] == '\t') && input[i] != '\0')
+		i++;
+	while (input[i] != '\0')
+	{
+		if (input[i] == '\'')
+		{
+			if (quotes == SINGLE_QUOTES)
+			{
+				quotes = 0;
+				len++;
+			}
+			else if (quotes == 0)
+				quotes = SINGLE_QUOTES;
+		}
+		else if (input[i] == '\"')
+		{
+			if (quotes == DOUBLE_QUOTES)
+			{
+				quotes = 0;
+				len++;
+			}
+			else if (quotes == 0)
+				quotes = DOUBLE_QUOTES;
+		}
+		else
+			if (input[i] == ' ' && input[i + 1] != ' ' && input[i + 1] != '\0' && input[i + 1] != '\'' && input[i + 1] != '\"' && quotes == 0)
+				len++;
+		i++;
+	}
+	printf("the line of split is %d\n", len);
+	return (len + 1);
+}
+
 /**
  *	split_cmd - get the first value from input that contain the single or double quotes.
  *		@input: the string to extract the sub string from it.							
  *		@conv: pointer to t_conv struct set it value.									
  **/
-char *split_cmd(char *input, t_conv *conv)
+char **split_cmd(char *input)
 {
 	int		i;
-	char	*split;
-	i = conv->end;
-	conv->quotes = 0;
-	while (input[i] != '\0')
-	{
-		if (conv->quotes == 0 && input[i] == '\'')
-		{
-			conv->quotes = SINGLE_QUOTES;
-			conv->start = i;
-		}
-		else if (conv->quotes == 0 && input[i] == '\"')
-		{
-			conv->quotes = DOUBLE_QUOTES;
-			conv->start = i;
-		}
-		else
-		{
-			if (conv->quotes == SINGLE_QUOTES && input[i] == '\'')
-			{
-				conv->end = i + 1;
-				break ;
-			}
-			else if (conv->quotes == DOUBLE_QUOTES && input[i] == '\"')
-			{
-				conv->end = i + 1;
-				break ;
-			}
-		}
+	//char	**split;
+	int		len;
+	int		quotes;
+
+	i = 0;
+	quotes = 0;
+	while ((input[i] == ' ' || input[i] == '\t') && input[i] != '\0')
 		i++;
-	}
-	split = ft_substr(input, conv->start + 1, ft_strlen(input) - conv->end);
-	return (split);
+	len = get_cmd_len(input);
+	return (NULL);
 }
 
 /**
@@ -162,25 +182,27 @@ char *split_cmd(char *input, t_conv *conv)
 char *conv_to_cmd(char *input)
 {
 	char	*cmd;
-	// int		i;
+	int		i;
 	int 	quotes;
-	char	*sub;
+	//char	*sub;
 	t_conv	conv;
 	
 	conv.end = 0;
-	cmd = ft_strdup("\0");
+	conv.start = 0;
+	// cmd = ft_strdup("\0");
 	quotes = check_quotes(input);
 	if (quotes == -1)
 		quotes_error();
-	conv.end = skip_esp_tab(input);
-	while (quotes > 0)
+	i = get_cmd_len(input);
+	cmd = NULL;
+	// cmd = split_cmd(input, &conv);
+/*	while (quotes > 0)
 	{
 		sub = split_cmd(input, &conv);
-		printf("*** %s ***\n", sub);
 		cmd = ft_strjoin(cmd, sub);
 		free(sub);
 		quotes--;		
-	}
+	}*/
 	return (cmd);
 }
 

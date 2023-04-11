@@ -6,21 +6,21 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:57:08 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/04/10 15:11:10 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/04/11 17:11:22 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*ptr;
 	size_t	i;
 	
-	if (!(char *)s1)
+	if (!s1)
 	{
-		(char *)s1 = (char *)malloc(1);
-		s1[i] = '\0';
+		s1 = (char *)malloc(1);
+		s1[0] = '\0';
 	}
 	i = 0;
 	if (!s1 || !s2)
@@ -41,6 +41,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		s2++;
 	}
 	ptr[i] = '\0';
-	free((char *)s1);
+	free(s1);
 	return (ptr);
 }

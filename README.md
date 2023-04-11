@@ -76,5 +76,8 @@ Functions:
 	-> rl_redisplay : 
 		`rl_redisplay` is a fucntion provided by the `readline` library in C that allows you to force the display to be update with the current input line. this can be useful when you need to modify the input line in response to some event or condition, and you want to make sure that the update input line is immediately displayed to the user.
 			``` void rl_redisplay() ```
+
+
+			for terminal 
 	
 

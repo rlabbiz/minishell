@@ -6,20 +6,20 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:44:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/04/10 19:48:54 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/04/11 16:56:06 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 #include "minishell.h"
 
-/**************************************************************/
-/*	strappend - append @c to end of @str.					  */
-/*		@str: the string to add the @c in end of it.		  */
-/*		@c: the character to be added in end of @str.		  */
-/*		RETURN: return the new string contain the @str and @c,*/
-/*			or return @str if no @c   						  */
-/**************************************************************/
+/**
+ *	strappend - append @c to end of @str.					  
+ *		@str: the string to add the @c in end of it.		  
+ *		@c: the character to be added in end of @str.		  
+ *		RETURN: return the new string contain the @str and @c,
+ *			or return @str if no @c   						  
+ **/
 char *strappend(char *str, char c)
 {
 	char	*result;
@@ -43,12 +43,12 @@ char *strappend(char *str, char c)
 	return (result);
 }
 
-/***********************************************************************/
-/*	skip_esp_tab - skip the first espaces or tabs form @str.		   */
-/*		@str: the string to be skipt from it.						   */
-/*		RETURN: return the index of non-expace and non-tab in the @str,*/
-/*			if no espaces or tabs in the beginning return 0.		   */
-/***********************************************************************/
+/**
+ *	skip_esp_tab - skip the first espaces or tabs form @str.		   
+ *		@str: the string to be skipt from it.						   
+ *		RETURN: return the index of non-expace and non-tab in the @str,
+ *			if no espaces or tabs in the beginning return 0.		   
+ **/
 int skip_esp_tab(char *str)
 {
 	int	i;
@@ -59,21 +59,21 @@ int skip_esp_tab(char *str)
 	return (i);
 }
 
-/************************************************************/
-/*	quotes_error - print erorr message and exit of program. */
-/************************************************************/
+/**
+ *	quotes_error - print erorr message and exit of program. 
+ **/
 void quotes_error(void)
 {
 	printf("minishell: missing the single or double quotes.\n");
 	exit(1);
 }
 
-/*******************************************************************************/
-/*	check_quotes - count the signle or double quotes in @input and return it.  */
-/*		@input: the string to be searche into for the single or double quotes. */
-/*		RETURN: return how many single or double quotes contains in the @input,*/
-/*			or return -1 if any single or double quotes dosen't close. 		   */
-/*******************************************************************************/
+/**
+ *	check_quotes - count the signle or double quotes in @input and return it.  
+ *		@input: the string to be searche into for the single or double quotes. 
+ *		RETURN: return how many single or double quotes contains in the @input,
+ *			or return -1 if any single or double quotes dosen't close. 		   
+ **/
 int	check_quotes(char *input)
 {
 	int	i;
@@ -112,11 +112,11 @@ int	check_quotes(char *input)
 	return (-1);
 }
 
-/****************************************************************************************/
-/*	split_cmd - get the first value from input that contain the single or double quotes.*/
-/*		@input: the string to extract the sub string from it.							*/
-/*		@conv: pointer to t_conv struct set it value.									*/
-/****************************************************************************************/	
+/**
+ *	split_cmd - get the first value from input that contain the single or double quotes.
+ *		@input: the string to extract the sub string from it.							
+ *		@conv: pointer to t_conv struct set it value.									
+ **/
 char *split_cmd(char *input, t_conv *conv)
 {
 	int		i;
@@ -154,11 +154,11 @@ char *split_cmd(char *input, t_conv *conv)
 	return (split);
 }
 
-/****************************************************************/
-/*	conv_to_cmd - convert the @input to command and return it.   */
-/*		@input: the input readed from terminal of be converted. */
-/*		RETURN: return the command extracted from @input.       */
-/****************************************************************/
+/**
+ *	conv_to_cmd - convert the @input to command and return it.   
+ *		@input: the input readed from terminal of be converted. 
+ *		RETURN: return the command extracted from @input.       
+ **/
 char *conv_to_cmd(char *input)
 {
 	char	*cmd;

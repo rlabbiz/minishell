@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:44:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/04/11 21:34:37 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/04/13 16:44:09 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,11 @@ int	check_quotes(char *input)
 	return (-1);
 }
 
+/**
+ *	get_cmd_len - counter the len of arguments in @input and return it.
+ *		@input: the stirng to be counter how many arguments contains.
+ *		RETURN: return the len of arguments.
+ * **/
 int get_cmd_len(char *input)
 {
 	int	i;
@@ -130,7 +135,8 @@ int get_cmd_len(char *input)
 			if (quotes == SINGLE_QUOTES)
 			{
 				quotes = 0;
-				len++;
+				if (input[i + 1] == '\0' || input[i + 1] == ' ' || input[i + 1] == '\t')
+					len++;
 			}
 			else if (quotes == 0)
 				quotes = SINGLE_QUOTES;
@@ -140,18 +146,18 @@ int get_cmd_len(char *input)
 			if (quotes == DOUBLE_QUOTES)
 			{
 				quotes = 0;
-				len++;
+				if (input[i + 1] == '\0' || input[i + 1] == ' ' || input[i + 1] == '\t')
+					len++;
 			}
 			else if (quotes == 0)
 				quotes = DOUBLE_QUOTES;
 		}
-		else
-			if (input[i] == ' ' && input[i + 1] != ' ' && input[i + 1] != '\0' && input[i + 1] != '\'' && input[i + 1] != '\"' && quotes == 0)
-				len++;
+		else if (quotes == 0 && input[i] != ' ' && input[i] != '\t' && input[i] != '\'' && input[i] != '\"' && (input[i + 1] == '\'' || input[i + 1] == '\"' || input[i + 1] == '\0' || input[i + 1] == ' ' || input[i + 1] == '\t'))		
+			len++;
 		i++;
 	}
 	printf("the line of split is %d\n", len);
-	return (len + 1);
+	return (len);
 }
 
 /**
@@ -161,17 +167,17 @@ int get_cmd_len(char *input)
  **/
 char **split_cmd(char *input)
 {
+	char	**split;
+	int		start;
+	int		end;
 	int		i;
-	//char	**split;
 	int		len;
-	int		quotes;
-
-	i = 0;
-	quotes = 0;
-	while ((input[i] == ' ' || input[i] == '\t') && input[i] != '\0')
-		i++;
+	
 	len = get_cmd_len(input);
-	return (NULL);
+	split = malloc(sizeof(char *) * len + 1);
+	if (!split)
+		return (NULL);
+	
 }
 
 /**
@@ -201,7 +207,7 @@ char *conv_to_cmd(char *input)
 		sub = split_cmd(input, &conv);
 		cmd = ft_strjoin(cmd, sub);
 		free(sub);
-		quotes--;		
+		quotes--;
 	}*/
 	return (cmd);
 }

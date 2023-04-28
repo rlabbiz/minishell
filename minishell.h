@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:50 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/04/10 14:50:15 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/04/28 09:03:54 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,6 @@ typedef struct s_conv
 }	t_conv;
 
 // function used to convert input to command 
-char	*conv_to_cmd(char *input);
+char **split_cmd(char *input);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 05:18:06 by rlabbiz           #+#    #+#              #
-#    Updated: 2023/04/10 13:33:51 by rlabbiz          ###   ########.fr        #
+#    Updated: 2023/04/14 22:16:09 by rlabbiz          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CFLAGS = -Wall -Wextra -Werror
 OBJECT = minishell_ultis.o \
 		 check_args.o \
 		 prompt.o \
-		 convert_to_cmd.c
+		 convert_to_cmd.o
 MAIN_FILE = minishell.c
 DEPS = minishell.h
 LIBFT = libft/libft.a

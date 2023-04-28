@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/04/10 15:51:24 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/04/28 09:09:27 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,14 @@ int main(void)
 {
 	char *line;
 	char *prompt;
-	char *cmd;
+	char **cmd;
 
 	prompt = ft_strdup("minishell$ ");
 	line = readline(prompt);
 	while (line != NULL)
 	{
-		// printf("%s\n", line);
 		add_history(line);
-		cmd = conv_to_cmd(line);
-		printf("%s\n", cmd);
+		cmd = split_cmd(line);
 		free(cmd);
 		free(line);
 		line = readline(prompt);

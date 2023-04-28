@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:44:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/04/14 11:55:46 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/04/28 14:16:44 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,38 +78,30 @@ int	check_quotes(char *input)
 {
 	int	i;
 	int quotes;
-	int len;
 
 	i = 0;
 	quotes = 0;
-	len = 0;
 	while (input[i] != '\0')
 	{
 		if (input[i] == '\'')
 		{
 			if (quotes == SINGLE_QUOTES)
-			{
-				len++;
 				quotes = 0;
-			}
 			else if (quotes == 0)
 				quotes = SINGLE_QUOTES;
 		}
 		else if (input[i] == '\"')
 		{
 			if (quotes == DOUBLE_QUOTES)
-			{
-				len++;
 				quotes = 0;
-			}
 			else if (quotes == 0)
 				quotes = DOUBLE_QUOTES;
 		}
 		i++;
 	}
 	if (quotes == 0)
-		return (len);
-	return (-1);
+		return (0);
+	return (1);
 }
 
 /**
@@ -150,7 +142,10 @@ int get_cmd_len(char *input)
 					len++;
 			}
 			else if (quotes == 0)
+			{
 				quotes = DOUBLE_QUOTES;
+				
+			}
 		}
 		else if (quotes == 0 && input[i] != ' ' && input[i] != '\t' && input[i] != '\'' && input[i] != '\"' && (input[i + 1] == '\'' || input[i + 1] == '\"' || input[i + 1] == '\0' || input[i + 1] == ' ' || input[i + 1] == '\t'))
 			len++;
@@ -159,11 +154,48 @@ int get_cmd_len(char *input)
 	return (len);
 }
 
-/*char *get_sub(char *str, int start, int end)
+int check_if_quotes(char *str, int i, int *quotes)
 {
-	char	*sub;
+	if (*quotes != 0)
+	{
+		if (str[i] == '\'' && *quotes == SINGLE_QUOTES)
+		{
+			*quotes = 0;
+			if (str[i + 1] == '\0' || str[i + 1] == ' ' || str[i + 1] == '\t')
+				return (1);
+		}
+		else if (str[i] == '\"' && *quotes == DOUBLE_QUOTES)
+		{
+			*quotes = 0;
+			if (str[i + 1] == '\0' || str[i + 1] == ' ' || str[i + 1] == '\t')
+				return (1);
+		}
+	}
+	else if (*quotes == 0)
+	{
+		if (str[i] == '\'')
+			*quotes = SINGLE_QUOTES;
+		else if (str[i] == '\"')
+			*quotes = DOUBLE_QUOTES;
+	}
+	return (0);
+}
 
-}*/
+int check_espace(char c, int quotes)
+{
+	if (c != '\0' && quotes == 0 && (c == ' ' || c == '\t'))
+		return (1);
+	return (0);
+}
+
+// char *convert_to_cmd(char *str)
+// {
+// 	char	*cmd;
+// 	int		i;
+// 	int		quotes;
+
+	
+// }
 
 /**
  *	split_cmd - get the first value from input that contain the single or double quotes.
@@ -172,89 +204,44 @@ int get_cmd_len(char *input)
  **/
 char **split_cmd(char *input)
 {
-	char	**split;
-	int		start;
-	int		end;
-	int		i;
+	char	**ptr;
 	int		len;
+	int		j;
+	int		i;
 	int		quotes;
-	
-	len = get_cmd_len(input);
-	split = malloc(sizeof(char *) * len + 1);
-	if (!split)
+	int		start;
+
+	if (!input)
 		return (NULL);
-	i = 0;
-	start = 0;
-	quotes = 0;
-	end = 0;
+	len = get_cmd_len(input);
 	printf("%d\n", len);
-	while (i < len)
+	ptr = (char **)malloc((len + 1) * sizeof(char *));
+	if (!ptr)
+		return (NULL);
+	if (check_quotes(input))
+		exit(1);
+	j = 0;
+	i = 0;
+	quotes = 0;
+	start = 0;
+	while (input[i] && j < len)
 	{
-		while (quotes == 0 && input[start] != '\0' && (input[start] == ' ' || input[start] == '\t'))
-			start++;
-		end = start;
-		while (input[end] != '\0' &&  !((quotes == SINGLE_QUOTES && input[end] == '\'') || (quotes == DOUBLE_QUOTES && input[end] == '\"') || (quotes == 0 && (input[end] == ' ' || input[end] == '\t'))))
-		{
-			if (input[end] == '\'')
-			{
-				if (quotes == 0)
-					quotes = SINGLE_QUOTES;
-				else if (quotes == SINGLE_QUOTES)
-					quotes = 0;
-			}
-			else if (input[end] == '\"')
-			{
-				if (quotes == 0)
-					quotes = DOUBLE_QUOTES;
-				else if (quotes == DOUBLE_QUOTES)
-					quotes = 0;
-			}
-			end++;
-		}
-		printf("the value of start is %d and the value of end is %d\n", start, end);
-		split[i] = ft_substr(input, start, end);
-		start = end + 1;
-		i++;
+		while (check_espace(input[i], quotes))
+			i++;
+		start = i;
+		while (input[i] != '\0' && !check_espace(input[i], quotes) && !check_if_quotes(input, i, &quotes))
+			i++;
+		// if (input[start] == '\'' || input[start] == '\"')
+		// 	start++;
+		// while (input[i] != '\0' && (input[i] == ' '))
+		// 	i++;
+		if (input[i] == '\'' || input[i] == '\"')
+			i++;
+		ptr[j] = ft_substr(input, start, i + 1 - start);
+		printf("%s\n", ptr[j]);
+		j++;
 	}
-	split[i] = NULL;
-	return (split);
+	ptr[j] = NULL;
+	return (ptr);
 }
 
-/**
- *	conv_to_cmd - convert the @input to command and return it.   
- *		@input: the input readed from terminal of be converted. 
- *		RETURN: return the command extracted from @input.       
- **/
-char *conv_to_cmd(char *input)
-{
-	char	*cmd;
-	int		i;
-	int 	quotes;
-	//char	*sub;
-	t_conv	conv;
-	char	**split = split_cmd(input);
-	 i = 0;
-	 while (split[i] != NULL)
-	 {
-	 	printf("%s\n", split[i]);
-		i++;
-	 }
-	
-	conv.end = 0;
-	conv.start = 0;
-	// cmd = ft_strdup("\0");
-	quotes = check_quotes(input);
-	if (quotes == -1)
-		quotes_error();
-	i = get_cmd_len(input);
-	cmd = NULL;
-	// cmd = split_cmd(input, &conv);
-/*	while (quotes > 0)
-	{
-		sub = split_cmd(input, &conv);
-		cmd = ft_strjoin(cmd, sub);
-		free(sub);
-		quotes--;
-	}*/
-	return (cmd);
-}

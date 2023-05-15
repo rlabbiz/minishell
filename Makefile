@@ -6,7 +6,7 @@
 #    By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 05:18:06 by rlabbiz           #+#    #+#              #
-#    Updated: 2023/04/14 22:16:09 by rlabbiz          ###   ########.fr        #
+#    Updated: 2023/05/14 15:17:03 by rlabbiz          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ LIBFT = libft/libft.a
 all: $(NAME)
 
 $(LIBFT): 
-	@make -C libft
+	@make bonus -C libft
 
 $(NAME): $(MAIN_FILE) $(OBJECT) $(DEPS) $(LIBFT)
 	@$(CC) $(CFLAGS) -L /Users/rlabbiz/.brew/opt/readline/lib -I /Users/rlabbiz/.brew/opt/readline/include -lreadline $(OBJECT) $(LIBFT) $(MAIN_FILE) -o $(NAME)

@@ -6,12 +6,12 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/04/28 09:09:27 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/05/14 15:30:09 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "libft/libft.h"
+// #include "libft/libft.h"
 
 void free_split(char **split)
 {
@@ -45,13 +45,14 @@ int main(void)
 	char *line;
 	char *prompt;
 	char **cmd;
+	t_list list;
 
 	prompt = ft_strdup("minishell$ ");
 	line = readline(prompt);
 	while (line != NULL)
 	{
 		add_history(line);
-		cmd = split_cmd(line);
+		cmd = split_cmd(line, &list);
 		free(cmd);
 		free(line);
 		line = readline(prompt);

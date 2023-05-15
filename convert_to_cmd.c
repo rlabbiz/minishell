@@ -6,11 +6,11 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:44:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/04/28 14:16:44 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/05/14 20:01:33 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/libft.h"
+// #include "libft/libft.h"
 #include "minishell.h"
 
 /**
@@ -131,20 +131,22 @@ int get_cmd_len(char *input)
 					len++;
 			}
 			else if (quotes == 0)
+			{
 				quotes = SINGLE_QUOTES;
+				if (i > 0 && (input[i - 1] != ' ' || input[i - 1] != '\t'))
+					len--;
+			}
+		
 		}
 		else if (input[i] == '\"')
 		{
 			if (quotes == DOUBLE_QUOTES)
-			{
 				quotes = 0;
-				if (input[i + 1] == '\0' || input[i + 1] == ' ' || input[i + 1] == '\t')
-					len++;
-			}
 			else if (quotes == 0)
 			{
 				quotes = DOUBLE_QUOTES;
-				
+				if (i > 0 && (input[i - 1] != ' ' || input[i - 1] != '\t'))
+					len--;
 			}
 		}
 		else if (quotes == 0 && input[i] != ' ' && input[i] != '\t' && input[i] != '\'' && input[i] != '\"' && (input[i + 1] == '\'' || input[i + 1] == '\"' || input[i + 1] == '\0' || input[i + 1] == ' ' || input[i + 1] == '\t'))
@@ -188,21 +190,74 @@ int check_espace(char c, int quotes)
 	return (0);
 }
 
-// char *convert_to_cmd(char *str)
-// {
-// 	char	*cmd;
-// 	int		i;
-// 	int		quotes;
+int find_quotes(char *str, int i, int *quotes)
+{
+	if (str[i] == '\'')
+	{
+		if (*quotes == 0)
+			*quotes = SINGLE_QUOTES;
+		while (str[i] != '\0')
+		{ 
+			if (str[i] == '\'')
+				return (0);
+			if (str[i] == '\"')
+				return (1);
+			i++;
+		}
+	}
+	else if (str[i] == '\"')
+	{
+		if (*quotes == 0)
+			*quotes = DOUBLE_QUOTES;
+		while (str[i] != '\0')
+		{
+			if (str[i] == '\"')
+				return (0);
+			if (str[i] == '\'')
+				return (1);
+			i++;
+		}
+	}
+	return (1);
+}
 
+int check_cmd(char *old_cmd)
+{
+	char *new_cmd;
+	int i;
+	int j;
+	int quotes;
 	
-// }
+	new_cmd = malloc(sizeof(char ) * ft_strlen(old_cmd) + 1);
+	i = 0;
+	j = 0;
+	quotes = 0;
+	while (old_cmd[i] == ' ' || old_cmd[i] == '\t')
+		i++;
+	if (!old_cmd[i])
+		return (0);
+	while (old_cmd[i] != '\0')
+	{
+		if (find_quotes(old_cmd, i, &quotes) == 1)
+		{
+			new_cmd[j] = old_cmd[i];
+			j++;
+		}
+		i++;
+	}
+	new_cmd[j] = '\0';
+	if (ft_strlen(new_cmd) == 0)
+		return (0);
+	printf("%s\n", new_cmd);
+	return (1);
+}
 
 /**
  *	split_cmd - get the first value from input that contain the single or double quotes.
  *		@input: the string to extract the sub string from it.							
  *		@conv: pointer to t_conv struct set it value.									
  **/
-char **split_cmd(char *input)
+char **split_cmd(char *input, t_list *list)
 {
 	char	**ptr;
 	int		len;
@@ -210,36 +265,41 @@ char **split_cmd(char *input)
 	int		i;
 	int		quotes;
 	int		start;
+	char 	*cmd;
 
+	list = NULL;
 	if (!input)
 		return (NULL);
 	len = get_cmd_len(input);
-	printf("%d\n", len);
 	ptr = (char **)malloc((len + 1) * sizeof(char *));
 	if (!ptr)
 		return (NULL);
 	if (check_quotes(input))
-		exit(1);
+		quotes_error();
 	j = 0;
 	i = 0;
 	quotes = 0;
 	start = 0;
-	while (input[i] && j < len)
+	while (input[i])
 	{
 		while (check_espace(input[i], quotes))
 			i++;
 		start = i;
 		while (input[i] != '\0' && !check_espace(input[i], quotes) && !check_if_quotes(input, i, &quotes))
 			i++;
-		// if (input[start] == '\'' || input[start] == '\"')
-		// 	start++;
-		// while (input[i] != '\0' && (input[i] == ' '))
-		// 	i++;
 		if (input[i] == '\'' || input[i] == '\"')
 			i++;
-		ptr[j] = ft_substr(input, start, i + 1 - start);
-		printf("%s\n", ptr[j]);
+		cmd = ft_substr(input, start, i + 1 - start);
+		if (check_cmd(cmd))
+			ft_lstadd_back(&list, ft_lstnew(ft_substr(input, start, i + 1 - start)));
+		// ptr[j] = ft_substr(input, start, i + 1 - start);
+		// printf("%s\n", ptr[j]);
 		j++;
+	}
+	while (list != NULL)
+	{
+		printf(" 1 ==== > %s\n", list->content);
+		list = list->next;
 	}
 	ptr[j] = NULL;
 	return (ptr);

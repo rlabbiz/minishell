@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:44:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/20 19:25:26 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/05/22 19:47:19 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,6 @@ int	check_quotes(char *input)
 	quotes = 0;
 	while (input[i] != '\0' && (input[i] == ' ' || input[i] == '\t'))
 		i++;
-	if (input[i] != '\0' && (input[i] == '\'' && input[i + 1] == '\''))
-		return (-1);
-	else if (input[i] != '\0' && (input[i] == '\"' && input[i + 1] == '\"'))
-		return (-1);
 	while (input[i] != '\0')
 	{
 		if (input[i] == '\'')
@@ -64,6 +60,7 @@ int	check_quotes(char *input)
 	}
 	if (quotes == 0)
 		return (0);
+	printf("minishell: missing the single or double quotes.\n");
 	return (1);
 }
 
@@ -284,13 +281,12 @@ void split_cmd(char *input, t_list **list)
 	char 	*cmd;
 	char	c;
 
-
 	if (!input)
 		return ;
-	if (check_quotes(input) == 1)
-		quotes_error(1);
-	else if (check_quotes(input) == -1)
-		quotes_error(0);
+	// if (check_quotes(input) == 1)
+	// 	quotes_error(1);
+	// else if (check_quotes(input) == -1)
+	// 	quotes_error(0);
 	j = 0;
 	i = 0;
 	quotes = 0;
@@ -321,5 +317,4 @@ void split_cmd(char *input, t_list **list)
 		}
 	}
 	// print_stack(list);
-	
 }

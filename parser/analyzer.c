@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 14:59:41 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/21 13:07:22 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/05/22 18:19:01 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,24 @@ int check_pipe(char *data, int first)
     return (0);
 }
 
+int rdr_error(char *data)
+{
+	
+	if (data[0] != '<' && data[0] != '>')
+		return (0);
+	if (ft_strlen(data) == 3)
+	{
+		printf("minishell: syntax error near unexpected token `%c'\n", data[0]);
+		return (1);
+	}
+	else if (ft_strlen(data) > 3)
+	{
+		printf("minishell: syntax error near unexpected token `%c%c'\n", data[0], data[0]);
+		return (1);
+	}
+	return (0);
+}
+
 int check_rdr(char *data)
 {
 	if (data[0] != '<' && data[0] != '>')
@@ -97,16 +115,6 @@ int check_rdr(char *data)
 		return (1);
 	else if (ft_strlen(data) == 2 && !ft_strncmp(data, ">>", 2))
 		return (1);
-	else if (ft_strlen(data) == 3)
-	{
-		printf("minishell: syntax error near unexpected token `%c'\n", data[0]);
-		return (-1);
-	}
-	else if (ft_strlen(data) > 3)
-	{
-		printf("minishell: syntax error near unexpected token `%c%c'\n", data[0], data[0]);
-		return (-1);
-	}
     return (0);
 }
 
@@ -114,7 +122,7 @@ int syntax_error(t_list *list)
 {
 	t_list *node = list;
 	
-	if (check_rdr(node->content) == -1 || check_pipe(node->content, 0) == -1)
+	if (check_pipe(node->content, 0) == -1 || rdr_error(node->content))
 		return (1);
 	if (check_rdr(node->content) && node->next == NULL)
 	{
@@ -147,15 +155,22 @@ int syntax_error(t_list *list)
 	return (0);
 }
 
-void check_node(t_list *list)
+int check_node(t_list *list)
 {
     t_list *node = list;
     if (check_pipe(node->content, 1) == -1)
-        return ;
+	{
+		ft_lstclear(&list, &ft_del);
+        return (1);
+	}
     while (node != NULL)
     {
-        if (syntax_error(node))
-            return ;
+        if (syntax_error(node) || check_quotes(node->content))
+		{
+			ft_lstclear(&list, &ft_del);
+            return (1);
+		}
 		node = node->next;
     }
+	return (0);
 }

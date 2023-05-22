@@ -1,33 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   memory.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/20 15:11:21 by ael-amin         ###   ########.fr       */
+/*   Created: 2023/05/20 15:09:05 by ael-amin          #+#    #+#             */
+/*   Updated: 2023/05/20 15:12:41 by ael-amin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int main(void)
+void	free_split(char **split)
 {
-	char *line;
-	char *prompt;
-	char **cmd;
-	t_list list;
+	int	i;
 
-	prompt = ft_strdup("minishell$ ");
-	line = readline(prompt);
-	while (line != NULL)
+	i = 0;
+	while (split[i] != NULL)
 	{
-		add_history(line);
-		cmd = split_cmd(line, &list);
-		free(cmd);
-		free(line);
-		line = readline(prompt);
+		free(split[i]);
+		i++;
 	}
+	free(split);
+}
+
+int	ft_check_command(char *path, char *line)
+{
+	char	*command;
+
+	command = ft_strjoin(path, line);
+	if (access(command, F_OK) == 0)
+	{
+		free(command);
+		return (1);
+	}
+	free(command);
 	return (0);
 }

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+         #
+#    By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 05:18:06 by rlabbiz           #+#    #+#              #
-#    Updated: 2023/05/14 15:17:03 by rlabbiz          ###   ########.fr        #
+#    Updated: 2023/05/20 15:11:37 by ael-amin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,8 @@ CFLAGS = -Wall -Wextra -Werror
 OBJECT = minishell_ultis.o \
 		 check_args.o \
 		 prompt.o \
-		 convert_to_cmd.o
+		 convert_to_cmd.o \
+		 memory.o \
 MAIN_FILE = minishell.c
 DEPS = minishell.h
 LIBFT = libft/libft.a
@@ -26,7 +27,7 @@ LIBFT = libft/libft.a
 
 all: $(NAME)
 
-$(LIBFT): 
+$(LIBFT):
 	@make bonus -C libft
 
 $(NAME): $(MAIN_FILE) $(OBJECT) $(DEPS) $(LIBFT)

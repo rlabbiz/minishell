@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 14:59:41 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/22 18:19:01 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/05/22 20:32:21 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,18 +138,18 @@ int syntax_error(t_list *list)
 	{
 		if (ft_strlen(node->next->content) == 1)
 		{
-			printf("bash: syntax error near unexpected token `%c'\n", node->next->content[0]);
+			printf("minishell: syntax error near unexpected token `%c'\n", node->next->content[0]);
 			return (1);
 		}
 		else if (ft_strlen(node->next->content) > 1)
 		{
-			printf("bash: syntax error near unexpected token `%c%c'\n", node->next->content[0], node->next->content[0]);
+			printf("minishell: syntax error near unexpected token `%c%c'\n", node->next->content[0], node->next->content[0]);
 			return (1);
 		}
 	}
 	else if (check_rdr(node->content) && check_pipe(node->next->content, 0))
 	{
-		printf("bash: syntax error near unexpected token `|'\n");
+		printf("minishell: syntax error near unexpected token `|'\n");
 		return (1);
 	}
 	return (0);

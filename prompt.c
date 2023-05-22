@@ -6,11 +6,10 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 21:07:25 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/04/09 21:07:57 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/05/22 20:17:28 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 #include "minishell.h"
-
 

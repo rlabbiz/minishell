@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/20 19:27:51 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/05/22 12:35:11 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,12 @@ void print_stack(t_list *node)
 		list = list->next;
 	}
 }
+
+void ft_del(char *data)
+{
+	free(data);
+}
+
 int main(void)
 {
 	char *line;
@@ -64,10 +70,12 @@ int main(void)
 		add_history(line);
 		split_cmd(line, &list);
 		free(line);
-		print_stack(list);
-		check_node(list);
+		if (!check_node(list))
+		{
+			print_stack(list);
+			// parser(list, command);
+		}
 		line = readline(prompt);
-
 	}
 	free(prompt);
 	return (0);

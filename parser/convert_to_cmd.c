@@ -6,73 +6,30 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:44:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/14 20:01:33 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/05/20 19:25:26 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // #include "libft/libft.h"
-#include "minishell.h"
-
-/**
- *	strappend - append @c to end of @str.					  
- *		@str: the string to add the @c in end of it.		  
- *		@c: the character to be added in end of @str.		  
- *		RETURN: return the new string contain the @str and @c,
- *			or return @str if no @c   						  
- **/
-char *strappend(char *str, char c)
-{
-	char	*result;
-	int		i;
-
-	result = malloc(sizeof(char ) * ft_strlen(str) + 2);
-	if (!result)
-		return (NULL);
-	if (!c)
-		return (str);
-	i = 0;
-	while (str[i] != '\0')
-	{
-		result[i] = str[i];
-		i++;
-	}
-	result[i] = c;
-	i++;
-	result[i] = '\0';
-	free(str);
-	return (result);
-}
-
-/**
- *	skip_esp_tab - skip the first espaces or tabs form @str.		   
- *		@str: the string to be skipt from it.						   
- *		RETURN: return the index of non-expace and non-tab in the @str,
- *			if no espaces or tabs in the beginning return 0.		   
- **/
-int skip_esp_tab(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] != '\0' && str[i] == ' ')
-		i++;
-	return (i);
-}
+#include "../minishell.h"
 
 /**
  *	quotes_error - print erorr message and exit of program. 
  **/
-void quotes_error(void)
+void quotes_error(int type)
 {
-	printf("minishell: missing the single or double quotes.\n");
+	if (type)
+		printf("minishell: missing the single or double quotes.\n");
+	else
+		printf("minishell: : command not found\n");
 	exit(1);
 }
 
 /**
  *	check_quotes - count the signle or double quotes in @input and return it.  
- *		@input: the string to be searche into for the single or double quotes. 
- *		RETURN: return how many single or double quotes contains in the @input,
- *			or return -1 if any single or double quotes dosen't close. 		   
+ *		@input: the string to be searched within either single or double quotes. 
+ *		RETURN: return how many single or double quotes contained within the @input,
+ *			or return -1 if any single or double quotes don't close. 		   
  **/
 int	check_quotes(char *input)
 {
@@ -81,6 +38,12 @@ int	check_quotes(char *input)
 
 	i = 0;
 	quotes = 0;
+	while (input[i] != '\0' && (input[i] == ' ' || input[i] == '\t'))
+		i++;
+	if (input[i] != '\0' && (input[i] == '\'' && input[i + 1] == '\''))
+		return (-1);
+	else if (input[i] != '\0' && (input[i] == '\"' && input[i + 1] == '\"'))
+		return (-1);
 	while (input[i] != '\0')
 	{
 		if (input[i] == '\'')
@@ -196,32 +159,38 @@ int find_quotes(char *str, int i, int *quotes)
 	{
 		if (*quotes == 0)
 			*quotes = SINGLE_QUOTES;
-		while (str[i] != '\0')
-		{ 
-			if (str[i] == '\'')
+		else if (*quotes == SINGLE_QUOTES)
+		{
+			*quotes = 0;
+			return (0);
+		}
+		else if (*quotes == DOUBLE_QUOTES)
+			return (1);
+		while (str[i++] != '\0')
+		{
+			if (str[i] == '\'' && *quotes == SINGLE_QUOTES)
 				return (0);
-			if (str[i] == '\"')
-				return (1);
-			i++;
 		}
 	}
 	else if (str[i] == '\"')
 	{
 		if (*quotes == 0)
 			*quotes = DOUBLE_QUOTES;
-		while (str[i] != '\0')
+		else if (*quotes == DOUBLE_QUOTES)
 		{
-			if (str[i] == '\"')
+			*quotes = 0;
+			return (0);
+		}
+		while (str[i++] != '\0')
+		{
+			if (str[i] == '\"' && *quotes == DOUBLE_QUOTES)
 				return (0);
-			if (str[i] == '\'')
-				return (1);
-			i++;
 		}
 	}
 	return (1);
 }
 
-int check_cmd(char *old_cmd)
+char *check_cmd(char *old_cmd)
 {
 	char *new_cmd;
 	int i;
@@ -235,7 +204,10 @@ int check_cmd(char *old_cmd)
 	while (old_cmd[i] == ' ' || old_cmd[i] == '\t')
 		i++;
 	if (!old_cmd[i])
+	{
+		free(old_cmd);
 		return (0);
+	}
 	while (old_cmd[i] != '\0')
 	{
 		if (find_quotes(old_cmd, i, &quotes) == 1)
@@ -246,62 +218,108 @@ int check_cmd(char *old_cmd)
 		i++;
 	}
 	new_cmd[j] = '\0';
+	free(old_cmd);
 	if (ft_strlen(new_cmd) == 0)
 		return (0);
-	printf("%s\n", new_cmd);
-	return (1);
+	return (new_cmd);
 }
+
+int check_if_redirections(char *c, int i, int quotes)
+{
+	if (quotes == 0 && (c[i] == 60 || c[i] == 62 || c[i] == '|')) 
+		return (1);
+	return (0);
+}
+
+// void split_redirection(char *input, int i, t_list *list)
+// {
+	
+// }
+
+
+/*
+
+if (>> or <<) ft_strncmp(input, ">>", 2) == 0
+	len = 2;
+else if (| or > or <) *input == '|'
+	len = 1;
+else
+	len = get_lenght(input);
+ft_substr(input, 0, len);
+input =+ len;
+
+
+get_length
+{
+	len = 0;
+	if (input[len] == '|', '>', '<', ' ', '\t')ft_strchr("|>< \t", input[len])
+		return (len);
+	else if (input[len] == '\'', '"')
+	{
+		c = input[len]
+		len++;
+		while (input[len] && input[len] != c)
+			len++;
+		if (input[len] == 0)
+			return (len);
+		len++;
+	}
+	else
+		len++
+}
+*/
+
 
 /**
  *	split_cmd - get the first value from input that contain the single or double quotes.
  *		@input: the string to extract the sub string from it.							
  *		@conv: pointer to t_conv struct set it value.									
  **/
-char **split_cmd(char *input, t_list *list)
+void split_cmd(char *input, t_list **list)
 {
-	char	**ptr;
-	int		len;
 	int		j;
 	int		i;
 	int		quotes;
 	int		start;
 	char 	*cmd;
+	char	c;
 
-	list = NULL;
+
 	if (!input)
-		return (NULL);
-	len = get_cmd_len(input);
-	ptr = (char **)malloc((len + 1) * sizeof(char *));
-	if (!ptr)
-		return (NULL);
-	if (check_quotes(input))
-		quotes_error();
+		return ;
+	if (check_quotes(input) == 1)
+		quotes_error(1);
+	else if (check_quotes(input) == -1)
+		quotes_error(0);
 	j = 0;
 	i = 0;
 	quotes = 0;
 	start = 0;
-	while (input[i])
+	while (input[i] != '\0')
 	{
 		while (check_espace(input[i], quotes))
 			i++;
+		if (!input[i])
+			break ;
 		start = i;
-		while (input[i] != '\0' && !check_espace(input[i], quotes) && !check_if_quotes(input, i, &quotes))
+		while (input[i] != '\0' && !check_espace(input[i], quotes) && !check_if_quotes(input, i, &quotes) && !check_if_redirections(input, i, quotes))
 			i++;
 		if (input[i] == '\'' || input[i] == '\"')
 			i++;
-		cmd = ft_substr(input, start, i + 1 - start);
-		if (check_cmd(cmd))
-			ft_lstadd_back(&list, ft_lstnew(ft_substr(input, start, i + 1 - start)));
-		// ptr[j] = ft_substr(input, start, i + 1 - start);
-		// printf("%s\n", ptr[j]);
-		j++;
+		cmd = ft_substr(input, start, i - start);
+		if (cmd != NULL)
+			ft_lstadd_back(list, ft_lstnew(cmd));
+		if (ft_strchr("<>|", input[i]))
+		{
+			start = i;
+			c = input[i];
+			while (input[i] != '\0' && ft_strchr(&c, input[i]))
+				i++;
+			cmd = ft_substr(input, start, i - start);
+			if (cmd != NULL)
+				ft_lstadd_back(list, ft_lstnew(cmd));
+		}
 	}
-	while (list != NULL)
-	{
-		printf(" 1 ==== > %s\n", list->content);
-		list = list->next;
-	}
-	ptr[j] = NULL;
-	return (ptr);
+	// print_stack(list);
+	
 }
-

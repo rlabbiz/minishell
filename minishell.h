@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:50 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/14 15:12:18 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/05/20 20:05:01 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,11 @@ typedef struct s_conv
 	int quotes;
 }	t_conv;
 
-// function used to convert input to command 
-char **split_cmd(char *input, t_list *list);
+// split and get token from command
+void split_cmd(char *input, t_list **list);
+void print_stack(t_list *node);
+
+// analyze the command
+void check_node(t_list *list);
 
 #endif

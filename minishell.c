@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/14 15:30:09 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/05/20 19:27:51 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,22 +40,35 @@ int ft_check_command(char *path, char *line)
 	return (0);
 }
 
+
+void print_stack(t_list *node)
+{
+	t_list *list = node;
+	while (list != NULL)
+	{
+		printf(" ====> (%s)\n", list->content);
+		list = list->next;
+	}
+}
 int main(void)
 {
 	char *line;
 	char *prompt;
-	char **cmd;
-	t_list list;
-
+	t_list *list;
+	
 	prompt = ft_strdup("minishell$ ");
 	line = readline(prompt);
 	while (line != NULL)
 	{
+		list = NULL;
 		add_history(line);
-		cmd = split_cmd(line, &list);
-		free(cmd);
+		split_cmd(line, &list);
 		free(line);
+		print_stack(list);
+		check_node(list);
 		line = readline(prompt);
+
 	}
+	free(prompt);
 	return (0);
 }

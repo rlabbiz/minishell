@@ -6,13 +6,13 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 08:31:11 by rlabbiz           #+#    #+#             */
-/*   Updated: 2022/10/17 11:17:11 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/05/20 18:47:26 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list	*ft_lstnew(void *content)
+t_list	*ft_lstnew(char *content)
 {
 	t_list	*new_mode;
 

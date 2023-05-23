@@ -1,22 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstiter_bonus.c                                 :+:      :+:    :+:   */
+/*   tokenser*.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/11 09:55:17 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/23 13:19:09 by rlabbiz          ###   ########.fr       */
+/*   Created: 2023/05/20 15:05:14 by ael-amin          #+#    #+#             */
+/*   Updated: 2023/05/20 15:05:15 by ael-amin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-void	ft_lstiter(t_list *lst, void (*f)(void *))
-{
-	while (lst != NULL)
-	{
-		f(lst->content);
-		lst = lst->next;
-	}
-}

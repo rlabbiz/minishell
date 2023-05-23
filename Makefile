@@ -6,16 +6,20 @@
 #    By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 05:18:06 by rlabbiz           #+#    #+#              #
-#    Updated: 2023/05/22 10:12:37 by rlabbiz          ###   ########.fr        #
+#    Updated: 2023/05/22 21:44:05 by rlabbiz          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
 
 NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 OBJECT = minishell_ultis.o \
-		parser/convert_to_cmd.o \
-		parser/analyzer.o
+		 check_args.o \
+		 prompt.o \
+		 memory.o \
+		 parser/convert_to_cmd.o \
+		 parser/analyzer.o 
 MAIN_FILE = minishell.c
 DEPS = minishell.h
 LIBFT = libft/libft.a
@@ -25,7 +29,7 @@ LIBFT = libft/libft.a
 
 all: $(NAME)
 
-$(LIBFT): 
+$(LIBFT):
 	@make bonus -C libft
 
 $(NAME): $(MAIN_FILE) $(OBJECT) $(DEPS) $(LIBFT)

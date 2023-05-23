@@ -6,39 +6,14 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/22 20:32:48 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/05/23 13:15:27 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
+
+
 #include "minishell.h"
-// #include "libft/libft.h"
-
-void free_split(char **split)
-{
-	int i;
-
-	i = 0;
-	while (split[i] != NULL)
-	{
-		free(split[i]);
-		i++;
-	}
-	free(split);
-}
-
-int ft_check_command(char *path, char *line)
-{
-	char *command;
-
-	command = ft_strjoin(path, line);
-	if (access(command, F_OK) == 0)
-	{
-		free(command);
-		return (1);
-	}
-	free(command);
-	return (0);
-}
 
 
 void print_stack(t_list *node)
@@ -51,9 +26,9 @@ void print_stack(t_list *node)
 	}
 }
 
-void ft_del(char *data)
+void ft_del(void *pointer)
 {
-	free(data);
+	free(pointer);
 }
 
 int main(void)
@@ -61,7 +36,7 @@ int main(void)
 	char *line;
 	char *prompt;
 	t_list *list;
-	
+
 	prompt = ft_strdup("minishell$ ");
 	line = readline(prompt);
 	while (line != NULL)

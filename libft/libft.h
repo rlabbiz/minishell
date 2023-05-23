@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 08:56:04 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/22 20:32:35 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/05/23 13:12:57 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 typedef struct s_list
 {
-	char			*content;
+	void			*content;
 	struct s_list	*next;
 }	t_list;
 
@@ -59,9 +59,9 @@ char	*ft_itoa(int n);
 t_list	*ft_lstnew(char *content);
 void	ft_lstadd_back(t_list **lst, t_list *new);
 void	ft_lstadd_front(t_list **lst, t_list *new);
-void	ft_lstclear(t_list **lst, void (*del)(char *));
-void	ft_lstdelone(t_list *lst, void (*del)(char *));
-void	ft_lstiter(t_list *lst, void (*f)(char *));
+void	ft_lstclear(t_list **lst, void (*del)(void *));
+void	ft_lstdelone(t_list *lst, void (*del)(void *));
+void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstlast(t_list *lst);
 int		ft_lstsize(t_list *lst);
 

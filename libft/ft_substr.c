@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 08:56:10 by rlabbiz           #+#    #+#             */
-/*   Updated: 2022/10/17 13:58:56 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/05/18 15:49:36 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	char	*b;
 
 	i = 0;
-	if (!s)
+	if (!s || len <= 0)
 		return (0);
 	b = malloc(sizeof(char) * (len + 1));
 	if (b == 0)

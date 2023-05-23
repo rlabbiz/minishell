@@ -6,56 +6,66 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/14 15:30:09 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/05/23 13:15:27 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
+
+
 #include "minishell.h"
-// #include "libft/libft.h"
 
-void free_split(char **split)
+
+void print_stack(t_list *node)
 {
-	int i;
-
-	i = 0;
-	while (split[i] != NULL)
+	t_list *list = node;
+	while (list != NULL)
 	{
-		free(split[i]);
-		i++;
+		printf(" ====> (%s)\n", list->content);
+		list = list->next;
 	}
-	free(split);
 }
 
-// int ft_check_command(char *path, char *line)
-// {
-// 	char *command;
+void	ft_del(void *data)
+{
+	free(data);
+}
 
-// 	command = ft_strjoin(path, line);
-// 	if (access(command, F_OK) == 0)
-// 	{
-// 		free(command);
-// 		return (1);
-// 	}
-// 	free(command);
-// 	return (0);
-// }
+int ft_check_command(char *path, char *line)
+{
+	char *command;
+
+	command = ft_strjoin(path, line);
+	if (access(command, F_OK) == 0)
+	{
+		free(command);
+		return (1);
+	}
+	free(command);
+	return (0);
+}
 
 int main(void)
 {
 	char *line;
 	char *prompt;
-	char **cmd;
-	t_list list;
+	t_list *list;
 
 	prompt = ft_strdup("minishell$ ");
 	line = readline(prompt);
 	while (line != NULL)
 	{
+		list = NULL;
 		add_history(line);
-		cmd = split_cmd(line, &list);
-		free(cmd);
+		split_cmd(line, &list);
 		free(line);
+		if (!check_node(list))
+		{
+			print_stack(list);
+			// parser(list, command);
+		}
 		line = readline(prompt);
 	}
+	free(prompt);
 	return (0);
 }

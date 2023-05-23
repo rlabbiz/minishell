@@ -26,19 +26,19 @@ void free_split(char **split)
 	free(split);
 }
 
-int ft_check_command(char *path, char *line)
-{
-	char *command;
+// int ft_check_command(char *path, char *line)
+// {
+// 	char *command;
 
-	command = ft_strjoin(path, line);
-	if (access(command, F_OK) == 0)
-	{
-		free(command);
-		return (1);
-	}
-	free(command);
-	return (0);
-}
+// 	command = ft_strjoin(path, line);
+// 	if (access(command, F_OK) == 0)
+// 	{
+// 		free(command);
+// 		return (1);
+// 	}
+// 	free(command);
+// 	return (0);
+// }
 
 int main(void)
 {

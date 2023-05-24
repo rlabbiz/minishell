@@ -78,6 +78,5 @@ Functions:
 			``` void rl_redisplay() ```
 <<<<<<< HEAD
 =======
-
->>>>>>> 6db3240f5d23883956ce4ecf160e1b85d52eee9a
 	
+>>>>>>> e0ed6cd33fc6b2970d30b23760824bd3e1ffc3bb

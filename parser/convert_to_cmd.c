@@ -274,7 +274,7 @@ get_length
  **/
 void split_cmd(char *input, t_list **list)
 {
-	int		j;
+	// int		j;
 	int		i;
 	int		quotes;
 	int		start;
@@ -287,7 +287,7 @@ void split_cmd(char *input, t_list **list)
 	// 	quotes_error(1);
 	// else if (check_quotes(input) == -1)
 	// 	quotes_error(0);
-	j = 0;
+	// j = 0;
 	i = 0;
 	quotes = 0;
 	start = 0;

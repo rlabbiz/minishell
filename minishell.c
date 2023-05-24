@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/22 20:12:20 by ael-amin         ###   ########.fr       */
+/*   Updated: 2023/05/23 13:15:27 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 
 
@@ -25,9 +26,23 @@ void print_stack(t_list *node)
 	}
 }
 
-void ft_del(char *data)
+void	ft_del(void *data)
 {
 	free(data);
+}
+
+int ft_check_command(char *path, char *line)
+{
+	char *command;
+
+	command = ft_strjoin(path, line);
+	if (access(command, F_OK) == 0)
+	{
+		free(command);
+		return (1);
+	}
+	free(command);
+	return (0);
 }
 
 int main(void)

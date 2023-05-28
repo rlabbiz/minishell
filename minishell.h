@@ -33,10 +33,12 @@ typedef struct s_conv
 	int	quotes;
 }	t_conv;
 
-typedef struct s_command
+typedef struct s_cmd
 {
-	char	*command;
-}	t_command;
+	char	*arg;
+	int		fd;
+	int		type;
+}	t_cmd;
 
 // split and get token from command
 void	split_cmd(char *input, t_list **list);

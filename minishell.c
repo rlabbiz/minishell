@@ -50,6 +50,7 @@ int main(void)
 	char *line;
 	char *prompt;
 	t_list *list;
+	t_cmd *cmd = NULL;
 
 	prompt = ft_strdup("minishell$ ");
 	line = readline(prompt);
@@ -62,7 +63,7 @@ int main(void)
 		if (!check_node(list))
 		{
 			print_stack(list);
-			// parser(list, command);
+			list = parser(list, &cmd);
 		}
 		line = readline(prompt);
 	}

@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/26 15:00:05 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/05/31 15:30:07 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,17 +45,30 @@ int ft_check_command(char *path, char *line)
 	return (0);
 }
 
-// void print(t_list *node)
-// {
-
-
-// 	while (node != NULL)
-// 	{
-// 		t_cmd *cmd = (t_cmd *)node->content;
-// 		printf("the args is %s\nthe fd is %d\nthe type is %d\n", cmd->arg, cmd->fd, cmd->type);
-// 		node = node->next;
-// 	}
-// }
+void print(t_cmd *cmd)
+{
+	int i = 0;
+	int j = 0;
+	int len = cmd[0].cmd_len;
+	while (i < len)
+	{
+		printf("--------	command %d	---------\n", i + 1);
+		printf("-	args:\t\t\t\t-\n");
+		j = 0;
+		while (cmd[i].args[j] != NULL)
+		{
+			printf("--  		%s\t\t\t-\n", cmd[i].args[j]);
+			j++;
+		}
+		printf("-	ofd: %d\t\t\t\t-\n", cmd[i].ofd);
+		printf("-	ifd: %d\t\t\t\t-\n", cmd[i].ifd);
+		printf("-	inred: %d\t\t\t-\n", cmd[i].inred);
+		printf("-	outred: %d\t\t\t-\n", cmd[i].outred);
+		printf("-	cmd_len: %d\t\t\t-\n", cmd[i].cmd_len);
+		printf("-----------------------------------------\n");
+		i++;
+	}
+}
 
 int main(void)
 {
@@ -67,10 +80,15 @@ int main(void)
 =======
 	// t_list *new = NULL;
 	// t_cmd *cmd = NULL;
->>>>>>> 07e77acae8bccc492b4dfeb08dffe616e1863d39
 
 	prompt = ft_strdup("minishell$ ");
+	
 	line = readline(prompt);
+	while (line[0] == '\0')
+	{
+		free(line);
+		line = readline(prompt);
+	}
 	while (line != NULL)
 	{ 
 		list = NULL;
@@ -80,14 +98,15 @@ int main(void)
 		if (!check_node(list))
 		{
 			print_stack(list);
-<<<<<<< HEAD
-			list = parser(list, &cmd);
-=======
 			// new = parser(&list, &cmd);
 			// print(new);
->>>>>>> 07e77acae8bccc492b4dfeb08dffe616e1863d39
 		}
 		line = readline(prompt);
+		while (line[0] == '\0')
+		{
+			free(line);
+			line = readline(prompt);
+		}
 	}
 	free(prompt);
 	return (0);

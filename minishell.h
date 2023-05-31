@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:50 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/26 15:32:52 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/05/30 16:15:58 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,18 +42,13 @@ typedef struct s_conv
 
 typedef struct s_cmd
 {
-<<<<<<< HEAD
-	char	*arg;
-	int		fd;
-	int		type;
-=======
 	char	**arg;
 	int		ifd;
 	int		ofd;
 	int		inred;
 	int		outred;
+	int 	cmd_len;
 	struct s_cmd	*next;
->>>>>>> 07e77acae8bccc492b4dfeb08dffe616e1863d39
 }	t_cmd;
 
 // split and get token from command
@@ -64,8 +59,11 @@ int		check_quotes(char *input);
 
 // analyze the command
 int		check_node(t_list *list);
+int		check_rdr(char *data);
+int		check_pipe(char *data, int first);
+char	*check_cmd(char *old_cmd);
 
 // parser
-t_list *parser(t_list *list, t_cmd **cmd);
+t_cmd *parser(t_list *list);
 
 #endif

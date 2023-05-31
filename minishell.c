@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/23 13:15:27 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/05/26 15:00:05 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,17 +45,34 @@ int ft_check_command(char *path, char *line)
 	return (0);
 }
 
+// void print(t_list *node)
+// {
+
+
+// 	while (node != NULL)
+// 	{
+// 		t_cmd *cmd = (t_cmd *)node->content;
+// 		printf("the args is %s\nthe fd is %d\nthe type is %d\n", cmd->arg, cmd->fd, cmd->type);
+// 		node = node->next;
+// 	}
+// }
+
 int main(void)
 {
 	char *line;
 	char *prompt;
 	t_list *list;
+<<<<<<< HEAD
 	t_cmd *cmd = NULL;
+=======
+	// t_list *new = NULL;
+	// t_cmd *cmd = NULL;
+>>>>>>> 07e77acae8bccc492b4dfeb08dffe616e1863d39
 
 	prompt = ft_strdup("minishell$ ");
 	line = readline(prompt);
 	while (line != NULL)
-	{
+	{ 
 		list = NULL;
 		add_history(line);
 		split_cmd(line, &list);
@@ -63,7 +80,12 @@ int main(void)
 		if (!check_node(list))
 		{
 			print_stack(list);
+<<<<<<< HEAD
 			list = parser(list, &cmd);
+=======
+			// new = parser(&list, &cmd);
+			// print(new);
+>>>>>>> 07e77acae8bccc492b4dfeb08dffe616e1863d39
 		}
 		line = readline(prompt);
 	}

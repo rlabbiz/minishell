@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 19:48:48 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/23 14:38:27 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/05/26 18:03:56 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,64 +23,55 @@ struct t_list
     void *content;
     t_list *next;
 
-t_list *parser(t_list *node)
-    t_cmd *cmd;
-    len = get_cmd_len(node);
-    cmd = malloc(sizeof(t_cmd) * len);
-    while (i < len)
-        if ((char *)(node->content)[0] == <)
-            if (&& ft_strlen(node->content) == 1)
-                cmd[i].type = RDR_OUT;
-                cmd[i].fd = rdr_out((char *)node->next->content);
-            else if (&& ft_strlen(node->content) == 2)
-                cmd[i].type = RDR_HERDOCT;
-                cmd[i].fd = rdr_herdoct((char *)node->next->content);
-        else if ((char *)(node->content)[0] == >)  
-            if (ft_strlen(node->content) == 1)
-                cmd[i].type = RDR_IN;
-                cmd[i].fd = rdr_in((char *)node->next->content);
-            else if (ft_strlen(node->content) == 2)
-                cmd[i].type = RDR_APPEND;
-                cmd[i].fd = rdr_append((char *)node->next->content);
-        else if ((char *)(node->content)[0] == | )
-            i++;
-        else
-            cmd[i].arg = (char *)node->content;
+t_cmd *parser(t_list *node)
+	t_cmd *cmd = malloc(sizeof(t_cmd) * len);
+	cmd->arg = malloc(sizeof(char *) * (len + 1))
+	int i = 0;
+	if (ft_strncmp(node->content, ">", 1) == 0 && ft_strlen(node->content) == 1)
+	{
+		ft_redirection(&cmd, node->next->content, ">");
+		node = node->next->next;
+	}
+	else if (ft_strncmp(node->content, "<", 1) == 0 && ft_strlen(node->content) == 1)
+	{
+		ft_redirection(&cmd, node->next->content, ">");
+		node = node->next->next;
+	}
+	else if (ft_strncmp(node->content, ">>", 2) == 0 && ft_strlen(node->content) == 2)
+	{
+		ft_redirection(&cmd, node->next->content, ">>");
+		node = node->next->next;
+	}
+	else if (ft_strncmp(node->content, "<<", 2) == 0 && ft_strlen(node->content) == 2)
+	{
+		ft_redirection(&cmd, node->next->content, "<<");
+		node = node->next->next;
+	}
+	else if (ft_strncmp(node->content, "|") == 0 && ft_strlen(node->content) == 1)
+	{
+		ft_pipe(&cmd, list);
+		node = node->next->next;
+	}
+	else
+	{
+		while (check_rdr_pipe(node))
+		{
+			cmd->arg = arrayjoin(cmd->arg, node->content);
+			node = node->next;
+		}
+	}
+	
+	return (cmd);
+*/
+
+int get_cmd_line(t_list *list)
+{
+    t_list *node = list;
+    int len = 0;
+    while (node != NULL)
+    {
+        if (!ft_strncmp((char *)node->content, "|", 1) && ft_strlen((char *)node->content) == 1)
+            len++;
         node = node->next;
 
 */
-
-t_list *parser(t_list *node, t_cmd *cmd)
-{
-    t_list *lst = NULL;
-    int len;
-    int i = 0;
-    len = get_cmd_len(node);
-    cmd = malloc(sizeof(t_cmd) * len);
-    while (i < len)
-    {
-        if ((char *)(node->content)[0] == '<')
-            if (ft_strlen(node->content) == 1)
-                cmd[i].type = RDR_OUT;
-                // cmd[i].fd = rdr_out((char *)node->next->content);
-            else if (ft_strlen(node->content) == 2)
-                cmd[i].type = RDR_HERDOCT;
-                // cmd[i].fd = rdr_herdoct((char *)node->next->content);
-        else if ((char *)(node->content)[0] == '>')  
-            if (ft_strlen(node->content) == 1)
-                cmd[i].type = RDR_IN;
-                // cmd[i].fd = rdr_in((char *)node->next->content);
-            else if (ft_strlen(node->content) == 2)
-                cmd[i].type = RDR_APPEND;
-                // cmd[i].fd = rdr_append((char *)node->next->content);
-        else if ((char *)(node->content)[0] == '|')
-        {
-            ft_lstadd_back(&lst, ft_lstnew(&cmd[i]));
-            i++;
-        }
-        else
-            cmd[i].arg = (char *)node->content;
-        node = node->next;
-    }
-
-}

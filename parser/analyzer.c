@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 14:59:41 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/23 14:26:16 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/05/29 16:01:29 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,13 +109,13 @@ int check_rdr(char *data)
 	if (data[0] != '<' && data[0] != '>')
 		return (0);
 	if (ft_strlen(data) == 1 && !ft_strncmp(data, "<", 1))
-		return (1);
+		return (RDR_OUT);
 	else if (ft_strlen(data) == 1 && !ft_strncmp(data, ">", 1))
-		return (1);
+		return (RDR_IN);
 	else if (ft_strlen(data) == 2 && !ft_strncmp(data, "<<", 2))
-		return (1);
+		return (RDR_HERDOC);
 	else if (ft_strlen(data) == 2 && !ft_strncmp(data, ">>", 2))
-		return (1);
+		return (RDR_APPEND);
     return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:44:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/22 19:47:19 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/05/30 15:33:35 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,13 +198,13 @@ char *check_cmd(char *old_cmd)
 	i = 0;
 	j = 0;
 	quotes = 0;
-	while (old_cmd[i] == ' ' || old_cmd[i] == '\t')
-		i++;
-	if (!old_cmd[i])
-	{
-		free(old_cmd);
-		return (0);
-	}
+	// while (old_cmd[i] == ' ' || old_cmd[i] == '\t')
+	// 	i++;
+	// if (!old_cmd[i])
+	// {
+	// 	free(old_cmd);
+	// 	return (0);
+	// }
 	while (old_cmd[i] != '\0')
 	{
 		if (find_quotes(old_cmd, i, &quotes) == 1)
@@ -215,9 +215,6 @@ char *check_cmd(char *old_cmd)
 		i++;
 	}
 	new_cmd[j] = '\0';
-	free(old_cmd);
-	if (ft_strlen(new_cmd) == 0)
-		return (0);
 	return (new_cmd);
 }
 

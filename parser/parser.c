@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 19:48:48 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/30 17:45:38 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/01 17:02:21 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,89 @@ t_cmd get_args(t_list *lst, int cmd_len)
 	cmd.ofd = NONE;
 	cmd.inred = NONE;
 	cmd.outred = NONE;
+	cmd.first_rdr = NONE;
 	cmd.cmd_len = cmd_len;
 	return (cmd);
+}
+
+char *get_herdoc(void)
+{
+	char *herdoc;
+
+	herdoc = readline("> ");
+	while (herdoc[0] == '\0')
+		herdoc = readline("> ");
+	return (herdoc);
+}
+
+int herdoc(char *file)
+{
+	int fd[2];
+	char *herdoc;
+	if (pipe(fd) == -1)
+		exit(1);
+	herdoc = get_herdoc();
+	while (herdoc)
+	{
+		if (ft_strncmp(herdoc, file, ft_strlen(file)) == 0 && ft_strlen(herdoc) == ft_strlen(file))
+			break ;
+		ft_putstr_fd(herdoc, fd[1]);
+		ft_putstr_fd("\n", fd[1]);
+		free(herdoc);
+		herdoc = get_herdoc();
+	}
+	close(fd[1]);
+	if (herdoc)
+		free(herdoc);
+	return (fd[0]);
+}
+
+int  redirections(t_cmd *cmd, char *file, int rdr)
+{
+	if (rdr == RDR_IN)
+	{
+		if (cmd->first_rdr == -1)
+			cmd->first_rdr = RDR_IN;
+		if (cmd->ifd != -1)
+			close(cmd->ifd);
+		cmd->ifd = open(file, O_WRONLY | O_TRUNC | O_CREAT);
+	}
+	else if (rdr == RDR_OUT)
+	{
+		if (cmd->first_rdr == -1)
+			cmd->first_rdr = RDR_OUT;
+		if (cmd->ofd != -1)
+			close(cmd->ofd);
+		if (access(file, R_OK) == -1)
+		{
+			printf("minishell: %s: No such file or directory\n", file);
+			return (1);
+		}
+		cmd->ifd = open(file, O_RDONLY);
+	}
+	else if (rdr == RDR_APPEND)
+	{
+		if (cmd->first_rdr == -1)
+			cmd->first_rdr = RDR_APPEND;
+		if (cmd->inred != -1)
+			close(cmd->inred);
+		if (access(file, R_OK) == -1)
+		{
+			printf("minishell: %s: No such file or directory", file);
+			return (1);
+		}
+		cmd->inred = open(file, O_RDWR | O_CREAT | O_APPEND);
+	}
+	else if (rdr == RDR_HERDOC)
+	{
+		if (cmd->first_rdr == -1)
+			cmd->first_rdr = RDR_HERDOC;
+		if (cmd->outred != -1)
+			close(cmd->outred);
+		
+		cmd->outred = herdoc(file);
+	}
+	return (0);
 }
 
 t_cmd *parser(t_list *list)
@@ -137,7 +218,8 @@ t_cmd *parser(t_list *list)
 				break ;
 			if (rdr != 0 && node->next)
 			{
-				// redirections(&cmd[i], node->next->content, rdr);
+				if (redirections(&cmd[i], node->next->content, rdr))
+					return (NULL);
 				node = node->next;
 			}
 			if (node->next == NULL)

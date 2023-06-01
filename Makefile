@@ -34,7 +34,7 @@ $(LIBFT):
 	@make -C libft
 
 $(NAME): $(MAIN_FILE) $(OBJECT) $(DEPS) $(LIBFT)
-	@$(CC) $(CFLAGS) -L /Users/rlabbiz/.brew/opt/readline/lib -I /Users/rlabbiz/.brew/opt/readline/include -lreadline $(OBJECT) $(LIBFT) $(MAIN_FILE) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJECT) $(MAIN_FILE) $(LIBFT) -o $(NAME) -lreadline 
 	@echo "\t The $(NAME) is created. "
 
 .PHONY: all re clean fclean

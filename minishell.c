@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/31 15:30:07 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/01 15:38:08 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,6 @@
 #include "minishell.h"
 
 
-void print_stack(t_list *node)
-{
-	t_list *list = node;
-	while (list != NULL)
-	{
-		printf(" ====> (%s)\n", list->content);
-		list = list->next;
-	}
-}
 
 void	ft_del(void *data)
 {
@@ -64,28 +55,35 @@ void print(t_cmd *cmd)
 		printf("-	ifd: %d\t\t\t\t-\n", cmd[i].ifd);
 		printf("-	inred: %d\t\t\t-\n", cmd[i].inred);
 		printf("-	outred: %d\t\t\t-\n", cmd[i].outred);
+		printf("-	first_rdr: %d\t\t\t-\n", cmd[i].first_rdr);
 		printf("-	cmd_len: %d\t\t\t-\n", cmd[i].cmd_len);
 		printf("-----------------------------------------\n");
 		i++;
 	}
 }
 
-int main(void)
+char *get_line(void)
 {
+	char *prompt;;
 	char *line;
-	char *prompt;
-	t_list *list;
-	// t_list *new = NULL;
-	t_cmd *cmd;
-
 	prompt = ft_strdup("minishell$ ");
-	
 	line = readline(prompt);
 	while (line[0] == '\0')
 	{
 		free(line);
 		line = readline(prompt);
 	}
+	free(prompt);
+	return (line);
+}
+
+int main(void)
+{
+	char *line;
+	t_list *list;
+	t_cmd *cmd;
+	
+	line = get_line();
 	while (line != NULL)
 	{ 
 		list = NULL;
@@ -95,15 +93,10 @@ int main(void)
 		if (!check_node(list))
 		{
 			cmd = parser(list);
-			print(cmd);
+			if (cmd)
+				print(cmd);
 		}
-		line = readline(prompt);
-		while (line[0] == '\0')
-		{
-			free(line);
-			line = readline(prompt);
-		}
+		line = get_line();
 	}
-	free(prompt);
 	return (0);
 }

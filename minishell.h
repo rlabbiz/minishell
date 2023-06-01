@@ -48,6 +48,7 @@ typedef struct s_cmd
 	int		ofd;
 	int		inred;
 	int		outred;
+	int		first_rdr;
 	int 	cmd_len;
 	struct s_cmd	*next;
 }	t_cmd;

@@ -16,15 +16,6 @@
 #include "minishell.h"
 
 
-void print_stack(t_list *node)
-{
-	t_list *list = node;
-	while (list != NULL)
-	{
-		printf(" ====> (%s)\n", list->content);
-		list = list->next;
-	}
-}
 
 void	ft_del(void *data)
 {
@@ -75,11 +66,7 @@ int main(void)
 	char *line;
 	char *prompt;
 	t_list *list;
-<<<<<<< HEAD
-	t_cmd *cmd = NULL;
-=======
-	// t_list *new = NULL;
-	// t_cmd *cmd = NULL;
+	t_cmd *cmd;
 
 	prompt = ft_strdup("minishell$ ");
 	
@@ -97,9 +84,12 @@ int main(void)
 		free(line);
 		if (!check_node(list))
 		{
-			print_stack(list);
+			// print_stack(list);
+			// list = parser(list, &cmd);
 			// new = parser(&list, &cmd);
 			// print(new);
+			cmd = parser(list);
+			print(cmd);
 		}
 		line = readline(prompt);
 		while (line[0] == '\0')

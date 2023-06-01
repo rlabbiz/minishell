@@ -11,5 +11,6 @@
         "limits": "c",
         "new": "c",
         "typeinfo": "c"
-    }
+    },
+    "cmake.configureOnOpen": false
 }

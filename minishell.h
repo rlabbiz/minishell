@@ -17,6 +17,7 @@
 # include "libft/libft.h"
 # include <stdlib.h>
 # include <unistd.h>
+# include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -42,11 +43,12 @@ typedef struct s_conv
 
 typedef struct s_cmd
 {
-	char	**arg;
+	char	**args;
 	int		ifd;
 	int		ofd;
 	int		inred;
 	int		outred;
+	int		first_rdr;
 	int 	cmd_len;
 	struct s_cmd	*next;
 }	t_cmd;

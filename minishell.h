@@ -30,7 +30,7 @@
 # define RDR_OUT 2
 # define RDR_APPEND 3
 # define RDR_HERDOC 4
-# define NONE -1
+# define NONE 0
 
 // struct used to helpe `conv_to_cd` function.
 typedef struct s_conv

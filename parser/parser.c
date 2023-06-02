@@ -151,49 +151,68 @@ int herdoc(char *file)
 	return (fd[0]);
 }
 
-int  redirections(t_cmd *cmd, char *file, int rdr)
+int  redirections(t_cmd *cmd, char *file, int rdr, int *fd)
 {
 	if (rdr == RDR_IN)
 	{
-		if (cmd->first_rdr == -1)
+		if (cmd->first_rdr == NONE || cmd->first_rdr == RDR_APPEND)
 			cmd->first_rdr = RDR_IN;
-		if (cmd->ifd != -1)
+		if (cmd->ifd != NONE)
 			close(cmd->ifd);
+		if (cmd->inred != NONE)
+		{
+			close(cmd->inred);
+			cmd->inred = NONE;
+		}
 		cmd->ifd = open(file, O_WRONLY | O_TRUNC | O_CREAT);
 	}
 	else if (rdr == RDR_OUT)
 	{
-		if (cmd->first_rdr == -1)
+		if (cmd->first_rdr == NONE || cmd->first_rdr == RDR_HERDOC)
 			cmd->first_rdr = RDR_OUT;
-		if (cmd->ofd != -1)
+		if (cmd->ofd != NONE)
 			close(cmd->ofd);
-		if (access(file, R_OK) == -1)
+		if (cmd->outred != NONE)
+		{
+			close(cmd->outred);
+			cmd->outred = NONE;
+		}
+		if (access(file, F_OK) == -1)
 		{
 			printf("minishell: %s: No such file or directory\n", file);
 			return (1);
 		}
-		cmd->ifd = open(file, O_RDONLY);
+		cmd->ofd = open(file, O_RDONLY);
 	}
 	else if (rdr == RDR_APPEND)
 	{
-		if (cmd->first_rdr == -1)
+		if (cmd->first_rdr == NONE || cmd->first_rdr == RDR_IN)
 			cmd->first_rdr = RDR_APPEND;
-		if (cmd->inred != -1)
+		if (cmd->inred != NONE)
 			close(cmd->inred);
-		if (access(file, R_OK) == -1)
+		if (cmd->ifd != NONE)
 		{
-			printf("minishell: %s: No such file or directory", file);
+			close(cmd->ifd);
+			cmd->ifd = NONE;
+		}
+		if (access(file, F_OK) == -1)
+		{
+			printf("minishell: %s: No such file or directory\n", file);
 			return (1);
 		}
 		cmd->inred = open(file, O_RDWR | O_CREAT | O_APPEND);
 	}
 	else if (rdr == RDR_HERDOC)
 	{
-		if (cmd->first_rdr == -1)
+		if (cmd->first_rdr == NONE || cmd->first_rdr == RDR_OUT)
 			cmd->first_rdr = RDR_HERDOC;
-		if (cmd->outred != -1)
+		if (cmd->outred != NONE)
 			close(cmd->outred);
-		
+		if (cmd->ofd != NONE)
+		{
+			close(cmd->ofd);
+			cmd->ofd = NONE;
+		}
 		cmd->outred = herdoc(file);
 	}
 	return (0);
@@ -204,6 +223,7 @@ t_cmd *parser(t_list *list)
 	int len = get_cmd_line(list);
 	int i = 0;
 	int rdr = 0;
+	int fd = 0;
 	t_cmd *cmd = malloc(sizeof(t_cmd) * len);
 	t_list *node = list;
 	while (node && i < len)
@@ -218,7 +238,7 @@ t_cmd *parser(t_list *list)
 				break ;
 			if (rdr != 0 && node->next)
 			{
-				if (redirections(&cmd[i], node->next->content, rdr))
+				if (redirections(&cmd[i], node->next->content, rdr, &fd))
 					return (NULL);
 				node = node->next;
 			}

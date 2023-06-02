@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:50 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/05/31 22:31:28 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/02 13:00:01 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct s_cmd
 	int		ofd;
 	int		inred;
 	int		outred;
+	int		herdoc;
 	int		first_rdr;
 	int 	cmd_len;
 	struct s_cmd	*next;

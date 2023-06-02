@@ -6,16 +6,11 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/01 15:38:08 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/02 15:03:44 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-
-
 #include "minishell.h"
-
-
 
 void	ft_del(void *data)
 {
@@ -51,10 +46,11 @@ void print(t_cmd *cmd)
 			printf("--  		%s\t\t\t-\n", cmd[i].args[j]);
 			j++;
 		}
-		printf("-	ofd: %d\t\t\t\t-\n", cmd[i].ofd);
 		printf("-	ifd: %d\t\t\t\t-\n", cmd[i].ifd);
+		printf("-	ofd: %d\t\t\t\t-\n", cmd[i].ofd);
 		printf("-	inred: %d\t\t\t-\n", cmd[i].inred);
 		printf("-	outred: %d\t\t\t-\n", cmd[i].outred);
+		printf("-	herdoc: %d\t\t\t-\n", cmd[i].herdoc);
 		printf("-	first_rdr: %d\t\t\t-\n", cmd[i].first_rdr);
 		printf("-	cmd_len: %d\t\t\t-\n", cmd[i].cmd_len);
 		printf("-----------------------------------------\n");

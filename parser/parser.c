@@ -6,14 +6,13 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 19:48:48 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/02 20:18:55 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/01 17:02:21 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 /*
-
 t_cmd *parser(t_list *node)
 	t_cmd *cmd = malloc(sizeof(t_cmd) * len);
 	while (node != NULL AND i < len)
@@ -238,47 +237,41 @@ int is_spesial_char(char c, int position)
 void write_expend(char *herdoc, int fd)
 {
 	char *line = herdoc;
-	char *name;
+	char *name = NULL;
 	int i;
 	char *env = NULL;
 	while (line && *line)
 	{
 		i = 0;
-		while (line[i] && line[i] != '$')
-			i++;
-		if (i)
-			env = ft_substr(line, 0, i);
-		else if (*line && *line == '$')
+		if (*line == '$' && line[1] && (line[1] != ' ' || line[1] != '&'))
 		{
-			if (!line[i + 1] || line[i + 1] == ' ')
-				env = ft_substr(line, 0, 1);
-			else if (line[1] && is_spesial_char(line[1], 0))
-			{
+			line++;
+			while (line && line[i] && ft_isalnum(line[i]))
 				i++;
-				while (line[i] && line[i] != '$' && line[i] != ' ')
-					i++;
-				env = ft_substr(line, 0, i);
-			}
-			else
+			printf("%d\n", i);
+			name = ft_substr(line, 0, i);
+			if (name)
 			{
-				line++;
-				while (line[i] && line[i] != '$' && !is_spesial_char(line[i], 1))
-					i++;
-				name = ft_substr(line, 0, i);
-				printf("* %s %d *\n", name, i);
 				env = getenv(name);
-				if (name)
-					free(name);
+				free(name);
 			}
-			// exit(1);
+			if (env)
+			{
+				ft_putstr_fd(env, fd);
+				printf("%s\n", env);
+				env = NULL;
+			}
+			line = line + i;
 		}
-		printf("%s\n", env);
-		ft_putstr_fd(env, fd);
-			// if (env)
-			// 	free(env);
-		if (i == 0)
-			i++;
-		line = line + i;
+		else
+		{
+			if (*line)
+			{
+				ft_putchar_fd(*line, fd);
+				printf("%c\n", *line);
+			}
+			line++;
+		}
 	}
 }
 

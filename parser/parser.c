@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 19:48:48 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/01 17:02:21 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/04 21:07:37 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,11 @@ int  redirections(t_cmd *cmd, char *file, int rdr)
 			printf("minishell: %s: No such file or directory\n", file);
 			return (1);
 		}
+		else if (access(file, R_OK) == -1)
+		{
+			printf("bash: %s: Permission denied\n", file);
+			return (1);
+		}
 		cmd->ofd = open(file, O_RDONLY);
 	}
 	else if (rdr == RDR_APPEND)
@@ -234,52 +239,10 @@ int is_spesial_char(char c, int position)
 	return (0);
 }
 
-void write_expend(char *herdoc, int fd)
-{
-	char *line = herdoc;
-	char *name = NULL;
-	int i;
-	char *env = NULL;
-	while (line && *line)
-	{
-		i = 0;
-		if (*line == '$' && line[1] && (line[1] != ' ' || line[1] != '&'))
-		{
-			line++;
-			while (line && line[i] && ft_isalnum(line[i]))
-				i++;
-			printf("%d\n", i);
-			name = ft_substr(line, 0, i);
-			if (name)
-			{
-				env = getenv(name);
-				free(name);
-			}
-			if (env)
-			{
-				ft_putstr_fd(env, fd);
-				printf("%s\n", env);
-				env = NULL;
-			}
-			line = line + i;
-		}
-		else
-		{
-			if (*line)
-			{
-				ft_putchar_fd(*line, fd);
-				printf("%c\n", *line);
-			}
-			line++;
-		}
-	}
-}
-
-int herdoc(char *file, int expend)
+int herdoc(char *file)
 {
 	int fd[2];
 	char *herdoc;
-	int	len = 0;
 	if (pipe(fd) == -1)
 		exit(1);
 	herdoc = get_herdoc();
@@ -287,9 +250,6 @@ int herdoc(char *file, int expend)
 	{
 		if (ft_strncmp(herdoc, file, ft_strlen(file)) == 0 && ft_strlen(herdoc) == ft_strlen(file))
 			break ;
-		len = ft_charlen(herdoc, '$');
-		if (len && expend)
-			write_expend(herdoc, fd[1]);
 		else 
 		{
 			ft_putstr_fd(herdoc, fd[1]);
@@ -308,21 +268,15 @@ int read_herdocs(t_list *lst)
 {
 	t_list *node = lst;
 	int fd = -1;
-	int expend = 1;
 
 	while (node && node->next && !check_pipe(node->content, 0))
 	{
 		if (check_rdr(node->content) == RDR_HERDOC)
 		{
 			node = node->next;
-			if (ft_strchr(node->content, '\'') || ft_strchr(node->content, '\"'))
-			{
-				expend = 0;
-				printf("the string not be expend it in this case. \n");
-			}
 			if (fd != -1)
 				close(fd);
-			fd = herdoc(check_cmd(node->content), expend);
+			fd = herdoc(check_cmd(node->content));
 		}
 		node = node->next;
 	}

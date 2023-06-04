@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/02 15:03:44 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/04 21:07:39 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,15 @@ char *get_line(void)
 	return (line);
 }
 
-int main(void)
+int main(int ac, char **av , char **env)
 {
 	char *line;
 	t_list *list;
 	t_cmd *cmd;
+	
+	(void)ac;
+	(void)av;
+	(void)env;
 	
 	line = get_line();
 	while (line != NULL)

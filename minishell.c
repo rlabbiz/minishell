@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/05 17:09:53 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/05 17:40:27 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ t_env *get_value_of_env(char *str)
 	return (env);
 }
 
-t_list *get_env(char **str)
+t_list	*get_env(char **str)
 {
 	t_list	*lst_env;
 	int		i;
@@ -106,7 +106,40 @@ t_list *get_env(char **str)
 	return (lst_env);	
 }
 
-void printf_env(t_list *lst)
+void	export_env(t_list **lst, char *old_str)
+{
+	char	*str;
+	
+	str = check_cmd(old_str);
+	printf("*%s*\n", str);
+	ft_lstadd_back(lst, ft_lstnew(get_value_of_env(str)));
+	free(str);
+}
+
+void	unset_env(t_list **lst, char *name)
+{
+	t_list	*node;
+	t_list	*prive;
+	t_env	*env;
+
+	node = *list;
+	env = NULL;
+	prive = node;
+	while (node)
+	{
+		env = node->content;
+		if (ft_strncmp(env->name, name, ft_strlen(env->name)), && ft_strlen(env->name) == ft_strle(name))
+		{
+			prive->next = node->next;
+			ft_lstdelone();
+		}
+		prive = node;
+		node = node->next;
+	}
+}
+
+
+void	print_env(t_list *lst)
 {
 	t_list	*node;
 	t_env	*env;
@@ -116,12 +149,12 @@ void printf_env(t_list *lst)
 	while (lst)
 	{
 		env = lst->content;
-		printf("the name is : %s\nthe value is : %s\n\n", env->name, env->value);
+		printf("%s=%s\n", env->name, env->value);
 		lst = lst->next;
 	}
 }
 
-int main(int ac, char **av , char **env)
+int	main(int ac, char **av, char **env)
 {
 	char *line;
 	t_list *list;
@@ -129,10 +162,9 @@ int main(int ac, char **av , char **env)
 	t_list *lst_env;
 	(void)ac;
 	(void)av;
-	// (void)env;
 	
 	lst_env = get_env(env);
-	printf_env(lst_env);
+	// print_env(lst_env);
 	line = get_line();
 	while (line != NULL)
 	{ 

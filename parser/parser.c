@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 19:48:48 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/04 21:07:37 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/05 13:20:10 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,5 +317,6 @@ t_cmd *parser(t_list *list)
 		node = node->next;
 		i++;
 	}
+	ft_lstclear(&list, ft_del);
 	return (cmd);
 }

@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:50 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/04 11:05:20 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/05 16:56:54 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,12 @@ typedef struct s_cmd
 	int 	cmd_len;
 	struct s_cmd	*next;
 }	t_cmd;
+
+typedef struct s_env
+{
+	char *name;
+	char *value;
+}	t_env;
 
 // split and get token from command
 void	split_cmd(char *input, t_list **list);

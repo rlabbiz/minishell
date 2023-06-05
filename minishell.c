@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/05 15:45:05 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/05 17:09:53 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,17 +73,66 @@ char *get_line(void)
 	return (line);
 }
 
+t_env *get_value_of_env(char *str)
+{
+	t_env	*env;
+	int		i;
+	
+	env = malloc(sizeof(t_env));
+	i = 0;
+	while (str[i] && str[i] != '=')
+		i++;
+	env->name = ft_substr(str, 0, i);
+	while (*str && *str != '=')
+		str++;
+	if (*str && *str == '=')
+		str++;
+	if (*str)
+		env->value = ft_substr(str, 0, ft_strlen(str));
+	return (env);
+}
+
+t_list *get_env(char **str)
+{
+	t_list	*lst_env;
+	int		i;
+	
+	i = 0;
+	while (str[i])
+	{
+		ft_lstadd_back(&lst_env, ft_lstnew(get_value_of_env(str[i])));
+		i++;
+	}
+	return (lst_env);	
+}
+
+void printf_env(t_list *lst)
+{
+	t_list	*node;
+	t_env	*env;
+	
+	node = lst;
+	env = NULL;
+	while (lst)
+	{
+		env = lst->content;
+		printf("the name is : %s\nthe value is : %s\n\n", env->name, env->value);
+		lst = lst->next;
+	}
+}
+
 int main(int ac, char **av , char **env)
 {
 	char *line;
 	t_list *list;
 	t_cmd *cmd;
-	// t_list *lst_env;
+	t_list *lst_env;
 	(void)ac;
 	(void)av;
-	(void)env;
+	// (void)env;
 	
-	// lst_env = get_env(env);
+	lst_env = get_env(env);
+	printf_env(lst_env);
 	line = get_line();
 	while (line != NULL)
 	{ 

@@ -6,7 +6,7 @@
 #    By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 05:18:06 by rlabbiz           #+#    #+#              #
-#    Updated: 2023/06/05 15:43:05 by rlabbiz          ###   ########.fr        #
+#    Updated: 2023/06/05 16:37:51 by rlabbiz          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ OBJECT = minishell_ultis.o \
 		 parser/convert_to_cmd.o \
 		 parser/analyzer.o \
 		 parser/parser.o \
-		 build-in/build_in.c
+		 build-in/build_in.o
 MAIN_FILE = minishell.c
 DEPS = minishell.h
 LIBFT = libft/libft.a

@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/05 17:42:44 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/06 13:04:51 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,25 +116,44 @@ void	export_env(t_list **lst, char *old_str)
 	free(str);
 }
 
+void del_env(void *ptr)
+{
+	t_env	*env;
+
+	env = ptr;
+	free(env->name);
+	free(env->value);
+	free(env);
+}
+
 void	unset_env(t_list **lst, char *name)
 {
 	t_list	*node;
 	t_list	*prive;
+	t_list	*next;
 	t_env	*env;
 
-	node = *list;
-	env = NULL;
+	node = *lst;
+	env = node->content;
 	prive = node;
+	if (ft_strncmp(env->name, name, ft_strlen(env->name)) == 0 && ft_strlen(env->name) == ft_strlen(name))
+	{
+		*lst = node->next;
+		ft_lstdelone(node, del_env);
+		return ;
+	}
 	while (node)
 	{
 		env = node->content;
-		if (ft_strncmp(env->name, name, ft_strlen(env->name)), && ft_strlen(env->name) == ft_strle(name))
+		next = node->next;
+		if (ft_strncmp(env->name, name, ft_strlen(env->name)) == 0 && ft_strlen(env->name) == ft_strlen(name))
 		{
 			prive->next = node->next;
-			ft_lstdelone();
+			ft_lstdelone(node, del_env);
 		}
-		prive = node;
-		node = node->next;
+		else
+			prive = node;
+		node = next;
 	}
 }
 
@@ -164,7 +183,8 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	
 	lst_env = get_env(env);
-	// print_env(lst_env);
+	unset_env(&lst_env, "_");
+	print_env(lst_env);
 	line = get_line();
 	while (line != NULL)
 	{ 

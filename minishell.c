@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/06 13:04:51 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/07 16:09:54 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,105 +73,6 @@ char *get_line(void)
 	return (line);
 }
 
-t_env *get_value_of_env(char *str)
-{
-	t_env	*env;
-	int		i;
-	
-	env = malloc(sizeof(t_env));
-	i = 0;
-	while (str[i] && str[i] != '=')
-		i++;
-	env->name = ft_substr(str, 0, i);
-	while (*str && *str != '=')
-		str++;
-	if (*str && *str == '=')
-		str++;
-	if (*str)
-		env->value = ft_substr(str, 0, ft_strlen(str));
-	return (env);
-}
-
-t_list	*get_env(char **str)
-{
-	t_list	*lst_env;
-	int		i;
-	
-	i = 0;
-	while (str[i])
-	{
-		ft_lstadd_back(&lst_env, ft_lstnew(get_value_of_env(str[i])));
-		i++;
-	}
-	return (lst_env);	
-}
-
-void	export_env(t_list **lst, char *old_str)
-{
-	char	*str;
-	
-	str = check_cmd(old_str);
-	printf("*%s*\n", str);
-	ft_lstadd_back(lst, ft_lstnew(get_value_of_env(str)));
-	free(str);
-}
-
-void del_env(void *ptr)
-{
-	t_env	*env;
-
-	env = ptr;
-	free(env->name);
-	free(env->value);
-	free(env);
-}
-
-void	unset_env(t_list **lst, char *name)
-{
-	t_list	*node;
-	t_list	*prive;
-	t_list	*next;
-	t_env	*env;
-
-	node = *lst;
-	env = node->content;
-	prive = node;
-	if (ft_strncmp(env->name, name, ft_strlen(env->name)) == 0 && ft_strlen(env->name) == ft_strlen(name))
-	{
-		*lst = node->next;
-		ft_lstdelone(node, del_env);
-		return ;
-	}
-	while (node)
-	{
-		env = node->content;
-		next = node->next;
-		if (ft_strncmp(env->name, name, ft_strlen(env->name)) == 0 && ft_strlen(env->name) == ft_strlen(name))
-		{
-			prive->next = node->next;
-			ft_lstdelone(node, del_env);
-		}
-		else
-			prive = node;
-		node = next;
-	}
-}
-
-
-void	print_env(t_list *lst)
-{
-	t_list	*node;
-	t_env	*env;
-	
-	node = lst;
-	env = NULL;
-	while (lst)
-	{
-		env = lst->content;
-		printf("%s=%s\n", env->name, env->value);
-		lst = lst->next;
-	}
-}
 
 int	main(int ac, char **av, char **env)
 {
@@ -183,8 +84,6 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	
 	lst_env = get_env(env);
-	unset_env(&lst_env, "_");
-	print_env(lst_env);
 	line = get_line();
 	while (line != NULL)
 	{ 
@@ -194,7 +93,7 @@ int	main(int ac, char **av, char **env)
 		free(line);
 		if (!check_node(list))
 		{
-			cmd = parser(list);
+			cmd = parser(list, lst_env);
 			if (cmd)
 				print(cmd);
 		}

@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:44:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/03 20:38:29 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/07 20:18:22 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,6 +187,39 @@ int find_quotes(char *str, int i, int *quotes)
 	return (1);
 }
 
+t_list *get_expantion(char *str)
+{
+	int		quotes;
+	int		i;
+	int		start;
+	t_list *lst;
+	quotes = 0;
+	i = 0;
+	while (str[i])
+	{
+		start = i;
+		while (str[i] && find_quotes(str, i, &quotes) && (str[i] != '$' || quotes == SINGLE_QUOTES))
+			i++;
+		if (i > start)
+		{
+			ft_lstadd_back(&lst, ft_lstnew(ft_substr(str, start, i - start)));
+			printf("%s\n%d\n", ft_substr(str, start, i - start), i);
+		}
+		
+	}
+	exit(1);
+	return (lst);
+}
+
+char *check_cmd_and_expand(char *old_cmd)
+{
+	char	*new_cmd = NULL;
+	t_list *lst;
+	
+	lst = get_expantion(old_cmd);
+	return (new_cmd);
+}
+
 char *check_cmd(char *old_cmd)
 {
 	char *new_cmd;
@@ -313,5 +346,4 @@ void split_cmd(char *input, t_list **list)
 				ft_lstadd_back(list, ft_lstnew(cmd));
 		}
 	}
-	// print_stack(list);
 }

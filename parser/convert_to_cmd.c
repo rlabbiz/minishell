@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:44:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/07 20:18:22 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/08 19:40:24 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,39 +187,6 @@ int find_quotes(char *str, int i, int *quotes)
 	return (1);
 }
 
-t_list *get_expantion(char *str)
-{
-	int		quotes;
-	int		i;
-	int		start;
-	t_list *lst;
-	quotes = 0;
-	i = 0;
-	while (str[i])
-	{
-		start = i;
-		while (str[i] && find_quotes(str, i, &quotes) && (str[i] != '$' || quotes == SINGLE_QUOTES))
-			i++;
-		if (i > start)
-		{
-			ft_lstadd_back(&lst, ft_lstnew(ft_substr(str, start, i - start)));
-			printf("%s\n%d\n", ft_substr(str, start, i - start), i);
-		}
-		
-	}
-	exit(1);
-	return (lst);
-}
-
-char *check_cmd_and_expand(char *old_cmd)
-{
-	char	*new_cmd = NULL;
-	t_list *lst;
-	
-	lst = get_expantion(old_cmd);
-	return (new_cmd);
-}
-
 char *check_cmd(char *old_cmd)
 {
 	char *new_cmd;
@@ -258,45 +225,6 @@ int check_if_redirections(char *c, int i, int quotes)
 	return (0);
 }
 
-// void split_redirection(char *input, int i, t_list *list)
-// {
-	
-// }
-
-
-/*
-
-if (>> or <<) ft_strncmp(input, ">>", 2) == 0
-	len = 2;
-else if (| or > or <) *input == '|'
-	len = 1;
-else
-	len = get_lenght(input);
-ft_substr(input, 0, len);
-input =+ len;
-
-
-get_length
-{
-	len = 0;
-	if (input[len] == '|', '>', '<', ' ', '\t')ft_strchr("|>< \t", input[len])
-		return (len);
-	else if (input[len] == '\'', '"')
-	{
-		c = input[len]
-		len++;
-		while (input[len] && input[len] != c)
-			len++;
-		if (input[len] == 0)
-			return (len);
-		len++;
-	}
-	else
-		len++
-}
-*/
-
-
 /**
  *	split_cmd - get the first value from input that contain the single or double quotes.
  *		@input: the string to extract the sub string from it.							
@@ -304,7 +232,6 @@ get_length
  **/
 void split_cmd(char *input, t_list **list)
 {
-	// int		j;
 	int		i;
 	int		quotes;
 	int		start;
@@ -313,11 +240,6 @@ void split_cmd(char *input, t_list **list)
 
 	if (!input)
 		return ;
-	// if (check_quotes(input) == 1)
-	// 	quotes_error(1);
-	// else if (check_quotes(input) == -1)
-	// 	quotes_error(0);
-	// j = 0;
 	i = 0;
 	quotes = 0;
 	start = 0;

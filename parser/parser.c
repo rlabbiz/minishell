@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 19:48:48 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/07 19:34:42 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/08 20:11:00 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ t_cmd get_args(t_list *lst, int cmd_len)
 			break ;
 		if (node && !check_pipe(node->content, 0) && !check_rdr(node->content))
 		{
-			cmd.args[i] = check_cmd_and_expand(node->content);
+			cmd.args[i] = ft_strdup(node->content);
 			i++;
 			node = node->next;
 		}
@@ -124,8 +124,8 @@ char *get_herdoc(void)
 	char *herdoc;
 
 	herdoc = readline("> ");
-	while (herdoc[0] == '\0')
-		herdoc = readline("> ");
+	// while (herdoc || herdoc[0] == '\0')
+	// 	herdoc = readline("> ");
 	return (herdoc);
 }
 
@@ -142,7 +142,7 @@ int  redirections(t_cmd *cmd, char *file, int rdr)
 			close(cmd->inred);
 			cmd->inred = NONE;
 		}
-		cmd->ifd = open(file, O_WRONLY | O_TRUNC | O_CREAT);
+		cmd->ifd = open(file, O_RDWR | O_TRUNC | O_CREAT);
 	}
 	else if (rdr == RDR_OUT)
 	{
@@ -278,10 +278,10 @@ int herdoc(char *file, t_list *lst_env, int expand)
 {
 	int fd[2];
 	char *herdoc;
-	(void)lst_env;
+	
 	if (pipe(fd) == -1)
 		exit(1);
-	herdoc = get_herdoc();
+	herdoc = readline("> ");
 	while (herdoc)
 	{
 		if (ft_strncmp(herdoc, file, ft_strlen(file)) == 0 && ft_strlen(herdoc) == ft_strlen(file))
@@ -291,14 +291,14 @@ int herdoc(char *file, t_list *lst_env, int expand)
 			if (expand == 0)
 			{
 				ft_putstr_fd(herdoc, fd[1]);
-				printf("%s\n", herdoc);
+				//printf("%s\n", herdoc);
 				ft_putstr_fd("\n", fd[1]);
 			}
 			else if (expand == 1)
 				write_expantion(lst_env, herdoc, fd[1]);
 		}
 			free(herdoc);
-		herdoc = get_herdoc();
+		herdoc = readline("> ");
 	}
 	close(fd[1]);
 	if (herdoc)
@@ -313,7 +313,7 @@ int read_herdocs(t_list *lst, t_list *lst_env)
 	int expand = 1;
 	while (node && node->next && !check_pipe(node->content, 0))
 	{
-		if (check_rdr(node->content) == RDR_HERDOC)
+		if (check_rdr(node->content) == RDR_HERDOC)// get_redir_type() == HEREDOC
 		{
 			node = node->next;
 			if (ft_strchr(node->content, '\'') || ft_strchr(node->content, '\"'))
@@ -336,7 +336,7 @@ t_cmd *parser(t_list *list, t_list *lst_env)
 	int rdr = 0;
 	t_cmd *cmd = malloc(sizeof(t_cmd) * len);
 	t_list *node = list;
-	(void)lst_env;
+
 	while (node && i < len)
 	{
 		cmd[i] = get_args(node, len);

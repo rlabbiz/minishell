@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 16:42:27 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/07 16:09:02 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/08 12:51:21 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,11 +121,10 @@ void	print_env(t_list *lst)
 	t_env	*env;
 	
 	node = lst;
-	env = NULL;
-	while (lst)
+	while (node)
 	{
-		env = lst->content;
+		env = node->content;
 		printf("%s=%s\n", env->name, env->value);
-		lst = lst->next;
+		node = node->next;
 	}
 }

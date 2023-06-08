@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/07 16:09:54 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/08 17:13:19 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,15 +64,9 @@ char *get_line(void)
 	char *line;
 	prompt = ft_strdup("minishell$ ");
 	line = readline(prompt);
-	while (line[0] == '\0')
-	{
-		free(line);
-		line = readline(prompt);
-	}
 	free(prompt);
 	return (line);
 }
-
 
 int	main(int ac, char **av, char **env)
 {
@@ -80,14 +74,14 @@ int	main(int ac, char **av, char **env)
 	t_list *list;
 	t_cmd *cmd;
 	t_list *lst_env;
-	(void)ac;
-	(void)av;
 	
+	av += ac;
 	lst_env = get_env(env);
 	line = get_line();
-	while (line != NULL)
+	while (line)
 	{ 
 		list = NULL;
+		// cmd = NULL;
 		add_history(line);
 		split_cmd(line, &list);
 		free(line);
@@ -95,7 +89,9 @@ int	main(int ac, char **av, char **env)
 		{
 			cmd = parser(list, lst_env);
 			if (cmd)
+			{
 				print(cmd);
+			}
 		}
 		line = get_line();
 	}

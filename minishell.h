@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:50 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/07 20:16:07 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/08 19:54:38 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_cmd
 	int		inred;
 	int		outred;
 	int		herdoc;
-	int		first_rdr;
+	int		first_rdr; 
 	int 	cmd_len;
 	struct s_cmd	*next;
 }	t_cmd;
@@ -63,7 +63,6 @@ typedef struct s_env
 // split and get token from command
 void	split_cmd(char *input, t_list **list);
 void	print_stack(t_list *node);
-char *check_cmd_and_expand(char *old_cmd);
 void	ft_del(void *data);
 int		check_quotes(char *input);
 
@@ -84,5 +83,8 @@ void	export_env(t_list **lst, char *old_str);
 void del_env(void *ptr);
 void	unset_env(t_list **lst, char *name);
 void	print_env(t_list *lst);
+
+// excuetion
+void excuetion(t_cmd *cmd, t_list *lst_env);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 19:48:48 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/05 13:20:10 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/08 20:11:00 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ t_cmd get_args(t_list *lst, int cmd_len)
 			break ;
 		if (node && !check_pipe(node->content, 0) && !check_rdr(node->content))
 		{
-			cmd.args[i] = check_cmd(node->content);
+			cmd.args[i] = ft_strdup(node->content);
 			i++;
 			node = node->next;
 		}
@@ -124,8 +124,8 @@ char *get_herdoc(void)
 	char *herdoc;
 
 	herdoc = readline("> ");
-	while (herdoc[0] == '\0')
-		herdoc = readline("> ");
+	// while (herdoc || herdoc[0] == '\0')
+	// 	herdoc = readline("> ");
 	return (herdoc);
 }
 
@@ -142,7 +142,7 @@ int  redirections(t_cmd *cmd, char *file, int rdr)
 			close(cmd->inred);
 			cmd->inred = NONE;
 		}
-		cmd->ifd = open(file, O_WRONLY | O_TRUNC | O_CREAT);
+		cmd->ifd = open(file, O_RDWR | O_TRUNC | O_CREAT);
 	}
 	else if (rdr == RDR_OUT)
 	{
@@ -215,48 +215,90 @@ int ft_charlen(char *str, int c)
 	return (len);
 }
 
-int is_spesial_char(char c, int position)
+void write_expantion(t_list *lst_env, char *herdoc, int fd)
 {
-	char *check = NULL;
-	if (c && !position)
+	char	*line;
+	char	*name;
+	char	*env;
+	int		i;
+	
+	line = herdoc;
+	i = 0;
+	while (*line && line[i])
 	{
-		// check = ft_strchr("+-/=.,]}%%^~:", c);
-		if (ft_strchr("+-/=.,]}%%^~:!", c))
+		i = 0;
+		if (*line != '$')
 		{
-			free(check);
-			return (1);
+			ft_putchar_fd(*line, fd);
+			printf("%c", *line);
+			line++;
 		}
+		else if (*line == '$')
+		{
+			while (line[i] && line[i] == '$')
+				i++;
+			if (i > 1)
+			{
+				if (i % 2 != 0)
+				{
+					ft_putchar_fd(*line, fd);
+					printf("$\n");
+				}
+			}
+			else
+			{
+				line++;
+				while (line[i] && ft_isalnum(line[i]) && line[i] != ' ')
+					i++;
+				if (i == 1)
+				{
+					ft_putchar_fd(*line, fd);
+					printf("$\n");
+				}
+				else
+				{
+					name = ft_substr(line, 0, i);
+					printf("%d\n", i);
+					printf("*%s*\n", name);
+					env = get_env_value(lst_env, name);
+					if (env)
+					{
+						ft_putstr_fd(env, fd);
+						printf("%s\n", env);
+					}
+				}
+			}
+		}
+		line = line + i;
+		i = 0;
 	}
-	else if (c && position)
-	{
-		check = ft_strchr("+-/=.,]}%%^~*@#!: \t", c);
-		if (check)
-		{
-			free(check);
-			return (1);
-		}
-	} 
-	return (0);
 }
 
-int herdoc(char *file)
+int herdoc(char *file, t_list *lst_env, int expand)
 {
 	int fd[2];
 	char *herdoc;
+	
 	if (pipe(fd) == -1)
 		exit(1);
-	herdoc = get_herdoc();
+	herdoc = readline("> ");
 	while (herdoc)
 	{
 		if (ft_strncmp(herdoc, file, ft_strlen(file)) == 0 && ft_strlen(herdoc) == ft_strlen(file))
 			break ;
 		else 
 		{
-			ft_putstr_fd(herdoc, fd[1]);
-			ft_putstr_fd("\n", fd[1]);
+			if (expand == 0)
+			{
+				ft_putstr_fd(herdoc, fd[1]);
+				//printf("%s\n", herdoc);
+				ft_putstr_fd("\n", fd[1]);
+			}
+			else if (expand == 1)
+				write_expantion(lst_env, herdoc, fd[1]);
 		}
 			free(herdoc);
-		herdoc = get_herdoc();
+		herdoc = readline("> ");
 	}
 	close(fd[1]);
 	if (herdoc)
@@ -264,36 +306,41 @@ int herdoc(char *file)
 	return (fd[0]);
 }
 
-int read_herdocs(t_list *lst)
+int read_herdocs(t_list *lst, t_list *lst_env)
 {
 	t_list *node = lst;
 	int fd = -1;
-
+	int expand = 1;
 	while (node && node->next && !check_pipe(node->content, 0))
 	{
-		if (check_rdr(node->content) == RDR_HERDOC)
+		if (check_rdr(node->content) == RDR_HERDOC)// get_redir_type() == HEREDOC
 		{
 			node = node->next;
+			if (ft_strchr(node->content, '\'') || ft_strchr(node->content, '\"'))
+				expand = 0;
+			else 
+				expand = 1;
 			if (fd != -1)
 				close(fd);
-			fd = herdoc(check_cmd(node->content));
+			fd = herdoc(check_cmd(node->content), lst_env, expand);
 		}
 		node = node->next;
 	}
 	return (fd);
 }
 
-t_cmd *parser(t_list *list)
+t_cmd *parser(t_list *list, t_list *lst_env)
 {
 	int len = get_cmd_line(list);
 	int i = 0;
 	int rdr = 0;
 	t_cmd *cmd = malloc(sizeof(t_cmd) * len);
 	t_list *node = list;
+
 	while (node && i < len)
 	{
 		cmd[i] = get_args(node, len);
-		cmd[i].herdoc = read_herdocs(node);
+		cmd[i].herdoc = read_herdocs(node, lst_env);
 		while (1)
 		{
 			if (check_pipe(node->content, 0))

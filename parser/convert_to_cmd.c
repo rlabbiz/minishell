@@ -6,7 +6,7 @@
 /*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:44:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/06 20:08:07 by ael-amin         ###   ########.fr       */
+/*   Updated: 2023/06/08 20:32:59 by ael-amin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,7 +271,6 @@ get_length
  **/
 void split_cmd(char *input, t_list **list)
 {
-	// int		j;
 	int		i;
 	int		quotes;
 	int		start;
@@ -280,11 +279,6 @@ void split_cmd(char *input, t_list **list)
 
 	if (!input)
 		return ;
-	// if (check_quotes(input) == 1)
-	// 	quotes_error(1);
-	// else if (check_quotes(input) == -1)
-	// 	quotes_error(0);
-	// j = 0;
 	i = 0;
 	quotes = 0;
 	start = 0;
@@ -313,5 +307,4 @@ void split_cmd(char *input, t_list **list)
 				ft_lstadd_back(list, ft_lstnew(cmd));
 		}
 	}
-	// print_stack(list);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/08 17:13:19 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/08 22:24:11 by ael-amin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,13 @@ void print(t_cmd *cmd)
 
 char *get_line(void)
 {
-	char *prompt;;
-	char *line;
+	char	*prompt;
+	char	*line;
+
 	prompt = ft_strdup("minishell$ ");
 	line = readline(prompt);
+	while (!line && line[0] == '\0')
+		line = readline(prompt);
 	free(prompt);
 	return (line);
 }
@@ -74,12 +77,12 @@ int	main(int ac, char **av, char **env)
 	t_list *list;
 	t_cmd *cmd;
 	t_list *lst_env;
-	
+
 	av += ac;
 	lst_env = get_env(env);
 	line = get_line();
 	while (line)
-	{ 
+	{
 		list = NULL;
 		// cmd = NULL;
 		add_history(line);
@@ -91,6 +94,7 @@ int	main(int ac, char **av, char **env)
 			if (cmd)
 			{
 				print(cmd);
+				execution(cmd , lst_env);
 			}
 		}
 		line = get_line();

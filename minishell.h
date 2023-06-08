@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:50 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/08 19:54:38 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/08 22:16:20 by ael-amin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_cmd
 	int		inred;
 	int		outred;
 	int		herdoc;
-	int		first_rdr; 
+	int		first_rdr;
 	int 	cmd_len;
 	struct s_cmd	*next;
 }	t_cmd;
@@ -75,7 +75,7 @@ char	*check_cmd(char *old_cmd);
 // parser
 t_cmd *parser(t_list *list, t_list *lst_env);
 
-// build-in ---- env 
+// build-in ---- env
 t_env *get_value_of_env(char *str);
 t_list	*get_env(char **str);
 char *get_env_value(t_list *lst, char *name);
@@ -85,6 +85,6 @@ void	unset_env(t_list **lst, char *name);
 void	print_env(t_list *lst);
 
 // excuetion
-void excuetion(t_cmd *cmd, t_list *lst_env);
+void execution(t_cmd *cmd, t_list *lst_env);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/08 17:13:19 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/08 22:25:38 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,21 @@ char *get_line(void)
 	char *line;
 	prompt = ft_strdup("minishell$ ");
 	line = readline(prompt);
+	if (line == NULL)
+	{
+		free(prompt);
+		return (NULL);
+	}
+	while (line[0] == '\0')
+	{
+		free(line);
+		line = readline(prompt);
+		if (line == NULL)
+		{
+			free(prompt);
+			return (NULL);
+		}
+	}
 	free(prompt);
 	return (line);
 }

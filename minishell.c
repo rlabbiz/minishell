@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/08 22:25:38 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/08 22:30:20 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,12 +89,12 @@ int	main(int ac, char **av, char **env)
 	t_list *list;
 	t_cmd *cmd;
 	t_list *lst_env;
-	
+
 	av += ac;
 	lst_env = get_env(env);
 	line = get_line();
 	while (line)
-	{ 
+	{
 		list = NULL;
 		// cmd = NULL;
 		add_history(line);
@@ -106,6 +106,7 @@ int	main(int ac, char **av, char **env)
 			if (cmd)
 			{
 				print(cmd);
+				execution(cmd , lst_env);
 			}
 		}
 		line = get_line();

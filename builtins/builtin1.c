@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.c                                         :+:      :+:    :+:   */
+/*   builtin1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 16:30:22 by ael-amin          #+#    #+#             */
-/*   Updated: 2023/06/08 22:28:22 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/08 22:29:44 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+
+#include "../minishell.h"
 
 t_env *get_value_of_env(char *str)
 {
 	t_env	*env;
 	int		i;
-	
+
 	env = malloc(sizeof(t_env));
 	i = 0;
 	while (str[i] && str[i] != '=')
@@ -35,14 +36,14 @@ t_list	*get_env(char **str)
 {
 	t_list	*lst_env;
 	int		i;
-	
+
 	i = 0;
 	while (str[i])
 	{
 		ft_lstadd_back(&lst_env, ft_lstnew(get_value_of_env(str[i])));
 		i++;
 	}
-	return (lst_env);	
+	return (lst_env);
 }
 
 char *get_env_value(t_list *lst, char *name)
@@ -67,7 +68,7 @@ char *get_env_value(t_list *lst, char *name)
 void	export_env(t_list **lst, char *old_str)
 {
 	char	*str;
-	
+
 	str = check_cmd(old_str);
 	printf("*%s*\n", str);
 	ft_lstadd_back(lst, ft_lstnew(get_value_of_env(str)));
@@ -119,7 +120,7 @@ void	print_env(t_list *lst)
 {
 	t_list	*node;
 	t_env	*env;
-	
+
 	node = lst;
 	while (node)
 	{

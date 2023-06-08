@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   excuetion.c                                        :+:      :+:    :+:   */
+/*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 11:04:22 by ael-amin          #+#    #+#             */
-/*   Updated: 2023/06/08 15:11:07 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/08 22:15:58 by ael-amin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h" 
+#include "../minishell.h"
 
-void excuetion(t_cmd *cmd, t_list *lst_env)
+void execution(t_cmd *cmd, t_list *lst_env)
 {
     int i;
     int len;
@@ -25,7 +25,7 @@ void excuetion(t_cmd *cmd, t_list *lst_env)
         {
             if (!ft_strncmp(cmd[i].args[0], "env", 3) && ft_strlen(cmd[i].args[0]) == 3)
                 print_env(lst_env);
-            
+
         }
         i++;
     }

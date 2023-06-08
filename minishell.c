@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/08 22:30:20 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/08 22:37:00 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void print(t_cmd *cmd)
 
 char *get_line(void)
 {
-	char *prompt;;
+	char *prompt;
 	char *line;
 	prompt = ft_strdup("minishell$ ");
 	line = readline(prompt);

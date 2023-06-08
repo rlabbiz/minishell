@@ -1,16 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   build_in.c                                         :+:      :+:    :+:   */
+/*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
+<<<<<<< HEAD:build-in/builtins.c
+/*   Created: 2023/06/08 16:30:22 by ael-amin          #+#    #+#             */
+/*   Updated: 2023/06/08 16:30:46 by ael-amin         ###   ########.fr       */
+=======
 /*   Created: 2023/06/05 16:42:27 by rlabbiz           #+#    #+#             */
 /*   Updated: 2023/06/08 12:51:21 by rlabbiz          ###   ########.fr       */
+>>>>>>> 365cda3833e6e0ed1cd2a375c3a8e5e37c395dd9:build-in/build_in.c
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
+
 
 t_env *get_value_of_env(char *str)
 {

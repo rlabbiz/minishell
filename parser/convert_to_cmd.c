@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   convert_to_cmd.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:44:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/08 19:40:24 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/08 20:32:59 by ael-amin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../minishell.h"
 
 /**
- *	quotes_error - print erorr message and exit of program. 
+ *	quotes_error - print erorr message and exit of program.
  **/
 void quotes_error(int type)
 {
@@ -26,10 +26,10 @@ void quotes_error(int type)
 }
 
 /**
- *	check_quotes - count the signle or double quotes in @input and return it.  
- *		@input: the string to be searched within either single or double quotes. 
+ *	check_quotes - count the signle or double quotes in @input and return it.
+ *		@input: the string to be searched within either single or double quotes.
  *		RETURN: return how many single or double quotes contained within the @input,
- *			or return -1 if any single or double quotes don't close. 		   
+ *			or return -1 if any single or double quotes don't close.
  **/
 int	check_quotes(char *input)
 {
@@ -96,7 +96,7 @@ int get_cmd_len(char *input)
 				if (i > 0 && (input[i - 1] != ' ' || input[i - 1] != '\t'))
 					len--;
 			}
-		
+
 		}
 		else if (input[i] == '\"')
 		{
@@ -193,7 +193,7 @@ char *check_cmd(char *old_cmd)
 	int i;
 	int j;
 	int quotes;
-	
+
 	new_cmd = malloc(sizeof(char ) * ft_strlen(old_cmd) + 1);
 	i = 0;
 	j = 0;
@@ -220,22 +220,61 @@ char *check_cmd(char *old_cmd)
 
 int check_if_redirections(char *c, int i, int quotes)
 {
-	if (quotes == 0 && (c[i] == 60 || c[i] == 62 || c[i] == '|')) 
+	if (quotes == 0 && (c[i] == 60 || c[i] == 62 || c[i] == '|'))
 		return (1);
 	return (0);
 }
 
+// void split_redirection(char *input, int i, t_list *list)
+// {
+
+// }
+
+
+/*
+
+if (>> or <<) ft_strncmp(input, ">>", 2) == 0
+	len = 2;
+else if (| or > or <) *input == '|'
+	len = 1;
+else
+	len = get_lenght(input);
+ft_substr(input, 0, len);
+input =+ len;
+
+
+get_length
+{
+	len = 0;
+	if (input[len] == '|', '>', '<', ' ', '\t')ft_strchr("|>< \t", input[len])
+		return (len);
+	else if (input[len] == '\'', '"')
+	{
+		c = input[len]
+		len++;
+		while (input[len] && input[len] != c)
+			len++;
+		if (input[len] == 0)
+			return (len);
+		len++;
+	}
+	else
+		len++
+}
+*/
+
+
 /**
  *	split_cmd - get the first value from input that contain the single or double quotes.
- *		@input: the string to extract the sub string from it.							
- *		@conv: pointer to t_conv struct set it value.									
+ *		@input: the string to extract the sub string from it.
+ *		@conv: pointer to t_conv struct set it value.
  **/
 void split_cmd(char *input, t_list **list)
 {
 	int		i;
 	int		quotes;
 	int		start;
-	char 	*cmd;
+	char	*cmd;
 	char	c;
 
 	if (!input)

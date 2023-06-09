@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+         #
+#    By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 05:18:06 by rlabbiz           #+#    #+#              #
-#    Updated: 2023/06/08 22:16:41 by ael-amin         ###   ########.fr        #
+#    Updated: 2023/06/09 12:06:54 by rlabbiz          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ OBJECT = minishell_ultis.o \
 		 check_args.o \
 		 prompt.o \
 		 memory.o \
-		 parser/convert_to_cmd.o \
+		 parser/lexar.o \
+		 parser/lexar_quotes.o \
 		 parser/analyzer.o \
 		 parser/parser.o \
 		 builtins/builtin1.o \
@@ -36,8 +37,10 @@ $(LIBFT):
 	@make -C libft
 
 $(NAME): $(MAIN_FILE) $(OBJECT) $(DEPS) $(LIBFT)
-	@$(CC) $(CFLAGS) -L/Users/ael-amin/.brew/opt/readline/lib -I /Users/ael-amin/.brew/opt/readline/include -lreadline $(OBJECT) $(LIBFT) $(MAIN_FILE) -o $(NAME)
+	@$(CC) $(CFLAGS) -L/Users/rlabbiz/.brew/opt/readline/lib -I /Users/rlabbiz/.brew/opt/readline/include -lreadline $(OBJECT) $(LIBFT) $(MAIN_FILE) -o $(NAME)
 	@echo "\t The $(NAME) is created. "
+
+# @$(CC) $(CFLAGS) -L/Users/ael-amin/.brew/opt/readline/lib -I /Users/ael-amin/.brew/opt/readline/include -lreadline $(OBJECT) $(LIBFT) $(MAIN_FILE) -o $(NAME)
 
 .PHONY: all re clean fclean
 

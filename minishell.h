@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:50 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/08 22:16:20 by ael-amin         ###   ########.fr       */
+/*   Updated: 2023/06/09 12:54:09 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,11 @@ int		check_pipe(char *data, int first);
 char	*check_cmd(char *old_cmd);
 
 // parser
-t_cmd *parser(t_list *list, t_list *lst_env);
+t_cmd	*parser(t_list *list, t_list *lst_env);
+int		check_quotes(char *input);
+int		check_if_quotes(char *str, int i, int *quotes);
+int		find_quotes(char *str, int i, int *quotes);
+void	quotes_error(int type);
 
 // build-in ---- env
 t_env *get_value_of_env(char *str);

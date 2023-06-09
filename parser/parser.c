@@ -6,58 +6,11 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 19:48:48 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/08 20:11:00 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/09 10:03:06 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-/*
-t_cmd *parser(t_list *node)
-	t_cmd *cmd = malloc(sizeof(t_cmd) * len);
-	while (node != NULL AND i < len)
-	{
-		cmd[i] = get_args(node, len);
-		while (1)
-		{
-			if (check_pipe(node) OR node == NULL)
-				break ;
-			rdr = check_rdr(node->content);
-			if (rdr != 0 AND node->next != NULL)
-				redirections(&cmd[i], node->next->content, rdr);
-				node = node->next;
-			node = node->next;
-			rdr = 0;
-		}
-		node = node->next;
-		i++;
-	}
-	return (cmd);
-
-t_cmd get_args(t_list *node, int cmd_len)
-	while (node != NULL AND !check_pipe(node->content, 0))
-		if (node->next != NULL AND check_rdr(node->content) != 0)
-			node = node->next->next;
-		if (node != NULL AND !check_pipe(node->content) AND !check_rdr(node->content))
-			len++;
-			node = node->next;
-
-	cmd->args = malloc(sizeof(char *) * (i + 1));
-	while (node != NULL AND i < len AND !check_pipe(node->content, 0))
-		if (node->next != NULL AND check_rdr(node->content) != 0)
-			node = node->next->next;
-		if (node != NULL AND !check_pipe(node->content) AND !check_rdr(node->content))
-			cmd->args[i] = check_cmd(node->content);
-			i++;
-			node = node->next;
-	cmd->args[i] = NULL;
-	cmd->ifd = NONE;
-	cmd->ofd = NONE;
-	cmd->inred = NONE;
-	cmd->outred = NONE;
-	cmd->cmd_len = cmd_len;
-	
-*/
 
 int get_cmd_line(t_list *list)
 {
@@ -230,7 +183,6 @@ void write_expantion(t_list *lst_env, char *herdoc, int fd)
 		if (*line != '$')
 		{
 			ft_putchar_fd(*line, fd);
-			printf("%c", *line);
 			line++;
 		}
 		else if (*line == '$')
@@ -242,7 +194,6 @@ void write_expantion(t_list *lst_env, char *herdoc, int fd)
 				if (i % 2 != 0)
 				{
 					ft_putchar_fd(*line, fd);
-					printf("$\n");
 				}
 			}
 			else
@@ -253,18 +204,14 @@ void write_expantion(t_list *lst_env, char *herdoc, int fd)
 				if (i == 1)
 				{
 					ft_putchar_fd(*line, fd);
-					printf("$\n");
 				}
 				else
 				{
 					name = ft_substr(line, 0, i);
-					printf("%d\n", i);
-					printf("*%s*\n", name);
 					env = get_env_value(lst_env, name);
 					if (env)
 					{
 						ft_putstr_fd(env, fd);
-						printf("%s\n", env);
 					}
 				}
 			}
@@ -291,7 +238,6 @@ int herdoc(char *file, t_list *lst_env, int expand)
 			if (expand == 0)
 			{
 				ft_putstr_fd(herdoc, fd[1]);
-				//printf("%s\n", herdoc);
 				ft_putstr_fd("\n", fd[1]);
 			}
 			else if (expand == 1)
@@ -313,7 +259,7 @@ int read_herdocs(t_list *lst, t_list *lst_env)
 	int expand = 1;
 	while (node && node->next && !check_pipe(node->content, 0))
 	{
-		if (check_rdr(node->content) == RDR_HERDOC)// get_redir_type() == HEREDOC
+		if (check_rdr(node->content) == RDR_HERDOC)
 		{
 			node = node->next;
 			if (ft_strchr(node->content, '\'') || ft_strchr(node->content, '\"'))

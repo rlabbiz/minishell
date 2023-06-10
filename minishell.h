@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:50 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/09 12:54:09 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/10 18:37:56 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,8 @@ int		find_quotes(char *str, int i, int *quotes);
 void	quotes_error(int type);
 
 // build-in ---- env
-t_env *get_value_of_env(char *str);
-t_list	*get_env(char **str);
+t_env *get_value_of_env(t_list **lst, char *str);
+t_list	*get_env(t_list **lst, char **str);
 char *get_env_value(t_list *lst, char *name);
 void	export_env(t_list **lst, char *old_str);
 void del_env(void *ptr);
@@ -89,6 +89,6 @@ void	unset_env(t_list **lst, char *name);
 void	print_env(t_list *lst);
 
 // excuetion
-void execution(t_cmd *cmd, t_list *lst_env);
+void execution(t_cmd *cmd, t_list **lst_env);
 
 #endif

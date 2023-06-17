@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 14:59:41 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/10 13:13:59 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/17 10:55:34 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,27 @@ int	check_rdr(char *data)
 	return (0);
 }
 
-int	syntax_error(t_list *list)
+int	syntax_error_supp(t_list *node)
 {
-	t_list	*node;
+	(void)node;
+	if (ft_strlen(node->next->content) == 1)
+	{
+		printf("minishell: syntax error near unexpected token `%c'\n",
+			((char *)node->next->content)[0]);
+		return (1);
+	}
+	else if (ft_strlen(node->next->content) > 1)
+	{
+		printf("minishell: syntax error near unexpected token `%c%c'\n",
+			((char *)node->next->content)[0],
+			((char *)node->next->content)[0]);
+		return (1);
+	}
+	return (0);
+}
 
-	node = list;
+int	syntax_error(t_list *node)
+{
 	if (check_pipe(node->content, 0) == -1 || rdr_error(node->content))
 		return (1);
 	else if (check_rdr(node->content) && node->next == NULL)
@@ -82,19 +98,8 @@ int	syntax_error(t_list *list)
 	}
 	else if (check_rdr(node->content) && check_rdr(node->next->content))
 	{
-		if (ft_strlen(node->next->content) == 1)
-		{
-			printf("minishell: syntax error near unexpected token `%c'\n",
-				((char *)node->next->content)[0]);
+		if (syntax_error_supp(node))
 			return (1);
-		}
-		else if (ft_strlen(node->next->content) > 1)
-		{
-			printf("minishell: syntax error near unexpected token `%c%c'\n",
-				((char *)node->next->content)[0],
-				((char *)node->next->content)[0]);
-			return (1);
-		}
 	}
 	else if (check_rdr(node->content) && check_pipe(node->next->content, -1))
 	{

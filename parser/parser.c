@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 19:48:48 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/16 21:30:47 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/17 17:27:07 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,35 @@ int	get_cmd_line(t_list *list)
 		node = node->next;
 	}
 	return (len + 1);
+}
+
+void	get_arrgs_supp(t_list *node, t_cmd *cmd, int len, int cmd_len)
+{
+	int	i;
+
+	i = 0;
+	cmd->args = malloc(sizeof(char *) * (len + 1));
+	while (node && i < len && !check_pipe(node->content, 0))
+	{
+		if (node->next != NULL && check_rdr(node->content) != 0)
+			node = node->next->next;
+		if (!node)
+			break ;
+		if (node && !check_pipe(node->content, 0) && !check_rdr(node->content))
+		{
+			cmd->args[i] = ft_strdup(node->content);
+			i++;
+			node = node->next;
+		}
+	}
+	cmd->args[i] = NULL;
+	cmd->ifd = NONE;
+	cmd->ofd = NONE;
+	cmd->inred = NONE;
+	cmd->outred = NONE;
+	cmd->herdoc = NONE;
+	cmd->first_rdr = NONE;
+	cmd->cmd_len = cmd_len;
 }
 
 t_cmd	get_args(t_list *lst, int cmd_len)
@@ -53,29 +82,7 @@ t_cmd	get_args(t_list *lst, int cmd_len)
 			node = node->next;
 		}
 	}
-	node = lst;
-	cmd.args = malloc(sizeof(char *) * (len + 1));
-	while (node && i < len && !check_pipe(node->content, 0))
-	{
-		if (node->next != NULL && check_rdr(node->content) != 0)
-			node = node->next->next;
-		if (!node)
-			break ;
-		if (node && !check_pipe(node->content, 0) && !check_rdr(node->content))
-		{
-			cmd.args[i] = ft_strdup(node->content);
-			i++;
-			node = node->next;
-		}
-	}
-	cmd.args[i] = NULL;
-	cmd.ifd = NONE;
-	cmd.ofd = NONE;
-	cmd.inred = NONE;
-	cmd.outred = NONE;
-	cmd.herdoc = NONE;
-	cmd.first_rdr = NONE;
-	cmd.cmd_len = cmd_len;
+	get_arrgs_supp(lst, &cmd, len, cmd_len);
 	return (cmd);
 }
 
@@ -86,19 +93,6 @@ char	*get_herdoc(void)
 	herdoc = readline("> ");
 	return (herdoc);
 }
-
-// int check_ombig(char *str)
-// {
-// 	char *file = ft_strtrim(str, " ");
-// 	printf("%s\n", file);
-// 	if (ft_strchr(file, ' '))
-// 	{
-// 		free(file);
-// 		return (1);
-// 	}
-// 	free(file);
-// 	return (0);
-// }
 
 int	check_onbiges(char *file)
 {
@@ -118,9 +112,98 @@ int	check_onbiges(char *file)
 	return (0);
 }
 
+void redirections_in(t_cmd **lst, char *file)
+{
+	t_cmd	*cmd;
+
+	cmd = *lst;
+	if (cmd->first_rdr == NONE || cmd->first_rdr == RDR_APPEND)
+		cmd->first_rdr = RDR_IN;
+	if (cmd->ifd != NONE)
+		close(cmd->ifd);
+	if (cmd->inred != NONE)
+	{
+		close(cmd->inred);
+		cmd->inred = NONE;
+	}
+	if (access(file, F_OK) == -1)
+		cmd->ifd = open(file, O_CREAT | O_WRONLY);
+	else
+		cmd->ifd = open(file, O_WRONLY);
+}
+
+int redirections_out(t_cmd **lst, char *file)
+{
+	t_cmd	*cmd;
+
+	cmd = *lst;
+	if (cmd->first_rdr == NONE || cmd->first_rdr == RDR_HERDOC)
+		cmd->first_rdr = RDR_OUT;
+	if (cmd->ofd != NONE)
+		close(cmd->ofd);
+	if (cmd->outred != NONE)
+	{
+		close(cmd->outred);
+		cmd->outred = NONE;
+	}
+	if (access(file, F_OK) == -1)
+	{
+		printf("minishell: %s: No such file or directory\n", file);
+		return (1);
+	}
+	else if (access(file, R_OK) == -1)
+	{
+		printf("bash: %s: Permission denied\n", file);
+		return (1);
+	}
+	cmd->ofd = open(file, O_RDONLY);
+	return (0);
+}
+
+int redirections_append(t_cmd **lst, char *file)
+{
+	t_cmd	*cmd;
+
+	cmd = *lst;
+	if (cmd->first_rdr == NONE || cmd->first_rdr == RDR_IN)
+		cmd->first_rdr = RDR_APPEND;
+	if (cmd->inred != NONE)
+		close(cmd->inred);
+	if (cmd->ifd != NONE)
+	{
+		close(cmd->ifd);
+		cmd->ifd = NONE;
+	}
+	if (access(file, F_OK) == -1)
+	{
+		printf("minishell: %s: No such file or directory\n", file);
+		return (1);
+	}
+	cmd->inred = open(file, O_RDWR | O_CREAT | O_APPEND);
+	return (0);
+}
+
+void redirections_herdoc(t_cmd **lst)
+{
+	t_cmd	*cmd;
+
+	cmd = *lst;
+	if (cmd->first_rdr == NONE || cmd->first_rdr == RDR_OUT)
+		cmd->first_rdr = RDR_HERDOC;
+	if (cmd->outred != NONE)
+		close(cmd->outred);
+	if (cmd->ofd != NONE)
+	{
+		close(cmd->ofd);
+		cmd->ofd = NONE;
+	}
+	cmd->outred = cmd->herdoc;
+	cmd->herdoc = 0;
+}
+
 int	redirections(t_cmd *cmd, char *str, int rdr, t_list *lst_env)
 {
-	char *old_file = expantion(str, lst_env);
+	char *old_file = expantion(str, lst_env, 1);
 	char *file;
 	if (!old_file || check_onbiges(old_file))
 	{
@@ -129,143 +212,36 @@ int	redirections(t_cmd *cmd, char *str, int rdr, t_list *lst_env)
 	}
 	file = check_cmd(old_file);
 	if (rdr == RDR_IN)
-	{
-		if (cmd->first_rdr == NONE || cmd->first_rdr == RDR_APPEND)
-			cmd->first_rdr = RDR_IN;
-		if (cmd->ifd != NONE)
-			close(cmd->ifd);
-		if (cmd->inred != NONE)
-		{
-			close(cmd->inred);
-			cmd->inred = NONE;
-		}
-		cmd->ifd = open(file, O_RDWR | O_TRUNC | O_CREAT);
-	}
-	else if (rdr == RDR_OUT)
-	{
-		if (cmd->first_rdr == NONE || cmd->first_rdr == RDR_HERDOC)
-			cmd->first_rdr = RDR_OUT;
-		if (cmd->ofd != NONE)
-			close(cmd->ofd);
-		if (cmd->outred != NONE)
-		{
-			close(cmd->outred);
-			cmd->outred = NONE;
-		}
-		if (access(file, F_OK) == -1)
-		{
-			printf("minishell: %s: No such file or directory\n", file);
-			return (1);
-		}
-		else if (access(file, R_OK) == -1)
-		{
-			printf("bash: %s: Permission denied\n", file);
-			return (1);
-		}
-		cmd->ofd = open(file, O_RDONLY);
-	}
-	else if (rdr == RDR_APPEND)
-	{
-		if (cmd->first_rdr == NONE || cmd->first_rdr == RDR_IN)
-			cmd->first_rdr = RDR_APPEND;
-		if (cmd->inred != NONE)
-			close(cmd->inred);
-		if (cmd->ifd != NONE)
-		{
-			close(cmd->ifd);
-			cmd->ifd = NONE;
-		}
-		if (access(file, F_OK) == -1)
-		{
-			printf("minishell: %s: No such file or directory\n", file);
-			return (1);
-		}
-		cmd->inred = open(file, O_RDWR | O_CREAT | O_APPEND);
-	}
+		redirections_in(&cmd, file);
+	else if (rdr == RDR_OUT && redirections_out(&cmd, file))
+		return (1);
+	else if (rdr == RDR_APPEND && redirections_append(&cmd, file))
+		return (1);
 	else if (rdr == RDR_HERDOC)
-	{
-		if (cmd->first_rdr == NONE || cmd->first_rdr == RDR_OUT)
-			cmd->first_rdr = RDR_HERDOC;
-		if (cmd->outred != NONE)
-			close(cmd->outred);
-		if (cmd->ofd != NONE)
-		{
-			close(cmd->ofd);
-			cmd->ofd = NONE;
-		}
-		cmd->outred = cmd->herdoc;
-		cmd->herdoc = 0;
-	}
+		redirections_herdoc(&cmd);
 	return (0);
-}
-
-int	ft_charlen(char *str, int c)
-{
-	int	i;
-	int	len;
-
-	i = 0;
-	len = 0;
-	while (str && str[i])
-	{
-		if (str[i] == c)
-			len++;
-		i++;
-	}
-	return (len);
 }
 
 void	write_expantion(t_list *lst_env, char *herdoc, int fd)
 {
 	char	*line;
-	char	*name;
-	char	*env;
-	int		i;
-
-	line = herdoc;
-	i = 0;
-	while (*line && line[i])
+	line = expantion(herdoc, lst_env, 0);
+	if (line)
 	{
-		i = 0;
-		if (*line != '$')
-		{
-			ft_putchar_fd(*line, fd);
-			line++;
-		}
-		else if (*line == '$')
-		{
-			while (line[i] && line[i] == '$')
-				i++;
-			if (i > 1)
-			{
-				if (i % 2 != 0)
-				{
-					ft_putchar_fd(*line, fd);
-				}
-			}
-			else
-			{
-				line++;
-				while (line[i] && ft_isalnum(line[i]) && line[i] != ' ')
-					i++;
-				if (i == 1)
-				{
-					ft_putchar_fd(*line, fd);
-				}
-				else
-				{
-					name = ft_substr(line, 0, i);
-					env = get_env_value(lst_env, name);
-					if (env)
-					{
-						ft_putstr_fd(env, fd);
-					}
-				}
-			}
-		}
-		line = line + i;
-		i = 0;
+		ft_putstr_fd(line, fd);
+		free(line);
 	}
+}
+
+void	herdoc_supp(t_list *lst_env, char *herdoc, int fd, int expand)
+{
+	if (expand == 0)
+	{
+		ft_putstr_fd(herdoc, fd);
+		ft_putstr_fd("\n", fd);
+	}
+	else if (expand == 1)
+		write_expantion(lst_env, herdoc, fd);
 }
 
 int	herdoc(char *file, t_list *lst_env, int expand)
@@ -282,15 +258,7 @@ int	herdoc(char *file, t_list *lst_env, int expand)
 			&& ft_strlen(herdoc) == ft_strlen(file))
 			break ;
 		else
-		{
-			if (expand == 0)
-			{
-				ft_putstr_fd(herdoc, fd[1]);
-				ft_putstr_fd("\n", fd[1]);
-			}
-			else if (expand == 1)
-				write_expantion(lst_env, herdoc, fd[1]);
-		}
+			herdoc_supp(lst_env, herdoc, fd[1], expand);
 		free(herdoc);
 		herdoc = readline("> ");
 	}

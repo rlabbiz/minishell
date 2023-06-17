@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:44:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/09 12:56:33 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/17 11:12:12 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,42 +50,57 @@ int	check_if_redirections(char *c, int i, int quotes)
 	return (0);
 }
 
+char	*split_cmd_supp(char *input, int *i, int *quotes, int check)
+{
+	char	*cmd;
+	int		start;
+	char 	c;
+	
+	if (check == 0)
+	{
+		start = *i;
+		while (input[*i] != '\0' && !check_espace(input[*i], *quotes)
+			&& !check_if_quotes(input, *i, quotes)
+			&& !check_if_redirections(input, *i, *quotes))
+			(*i)++;
+		if (input[*i] == '\'' || input[*i] == '\"')
+			(*i)++;
+		cmd = ft_substr(input, start, (*i) - start);
+	}
+	else
+	{
+		start = *i;
+		c = input[*i];
+		while (input[*i] != '\0' && ft_strchr(&c, input[*i]))
+			(*i)++;
+		cmd = ft_substr(input, start, (*i) - start);
+	}
+	return (cmd);
+}
+
+
 void	split_cmd(char *input, t_list **list)
 {
 	int		i;
 	int		quotes;
-	int		start;
 	char	*cmd;
-	char	c;
 
 	if (!input)
 		return ;
 	i = 0;
 	quotes = 0;
-	start = 0;
 	while (input[i] != '\0')
 	{
 		while (check_espace(input[i], quotes))
 			i++;
 		if (!input[i])
 			break ;
-		start = i;
-		while (input[i] != '\0' && !check_espace(input[i], quotes)
-			&& !check_if_quotes(input, i, &quotes)
-			&& !check_if_redirections(input, i, quotes))
-			i++;
-		if (input[i] == '\'' || input[i] == '\"')
-			i++;
-		cmd = ft_substr(input, start, i - start);
+		cmd = split_cmd_supp(input, &i, &quotes, 0);
 		if (cmd != NULL)
 			ft_lstadd_back(list, ft_lstnew(cmd));
 		if (ft_strchr("<>|", input[i]))
 		{
-			start = i;
-			c = input[i];
-			while (input[i] != '\0' && ft_strchr(&c, input[i]))
-				i++;
-			cmd = ft_substr(input, start, i - start);
+			cmd = split_cmd_supp(input, &i, &quotes, 1);
 			if (cmd != NULL)
 				ft_lstadd_back(list, ft_lstnew(cmd));
 		}

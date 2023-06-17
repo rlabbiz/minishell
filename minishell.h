@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:50 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/16 19:35:11 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/17 16:46:40 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	print_env(t_list *lst);
 
 // excuetion
 void	execution(t_cmd *cmd, t_list **lst_env);
-char	*expantion(char *str, t_list *lst_env);
+char	*expantion(char *str, t_list *lst_env, int check);
 t_list	*write_expantion_on_lst(t_list *lst_env, char *str);
 
 

@@ -6,15 +6,11 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 11:04:22 by ael-amin          #+#    #+#             */
-/*   Updated: 2023/06/17 09:23:01 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/17 16:46:20 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-/*
-
-*/
 
 void echo(char **args, int type, int fd)
 {
@@ -258,7 +254,7 @@ t_list	*write_expantion_on_lst(t_list *lst_env, char *str)
 	return (lst);
 }
 
-char *expantion(char *str, t_list *lst_env)
+char *expantion(char *str, t_list *lst_env, int check)
 {
 	t_list *node = write_expantion_on_lst(lst_env, str);
 	t_list *lst = node;
@@ -269,7 +265,10 @@ char *expantion(char *str, t_list *lst_env)
 		arg = ft_strjoin(arg, lst->content);
 		lst = lst->next;
 	}
-	cmd = check_cmd(arg);
+	if (check)
+		cmd = check_cmd(arg);
+	else
+		cmd = arg;
 	printf("%s\n", cmd);
 	// free(str);
 	return (cmd);
@@ -351,7 +350,7 @@ void expand(t_cmd **list, t_list *lst_env)
 	c = 1;
 	while (node != NULL)
 	{
-		node->content = expantion(node->content, lst_env);
+		node->content = expantion(node->content, lst_env, 1);
 		node = node->next;
 	}
 	cmd->args = join_lst_to_arr(command);

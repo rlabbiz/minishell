@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 19:48:48 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/10 16:48:13 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/16 21:30:47 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,47 @@ char	*get_herdoc(void)
 	return (herdoc);
 }
 
-int	redirections(t_cmd *cmd, char *file, int rdr)
+// int check_ombig(char *str)
+// {
+// 	char *file = ft_strtrim(str, " ");
+// 	printf("%s\n", file);
+// 	if (ft_strchr(file, ' '))
+// 	{
+// 		free(file);
+// 		return (1);
+// 	}
+// 	free(file);
+// 	return (0);
+// }
+
+int	check_onbiges(char *file)
 {
+	int i = 0;
+	int len = 0;
+	char c;
+
+	c = 1;
+	while (file[i])
+	{
+		if (file[i] == c)
+			len++;
+		i++;
+	}
+	if (len > 2)
+		return (1);
+	return (0);
+}
+
+int	redirections(t_cmd *cmd, char *str, int rdr, t_list *lst_env)
+{
+	char *old_file = expantion(str, lst_env);
+	char *file;
+	if (!old_file || check_onbiges(old_file))
+	{
+		printf("minishell: %s: ambiguous redirect\n", str);
+		return(-1);
+	}
+	file = check_cmd(old_file);
 	if (rdr == RDR_IN)
 	{
 		if (cmd->first_rdr == NONE || cmd->first_rdr == RDR_APPEND)
@@ -315,7 +354,8 @@ t_cmd	*parser(t_list *list, t_list *lst_env)
 				break ;
 			if (rdr != 0 && node->next)
 			{
-				if (redirections(&cmd[i], node->next->content, rdr))
+				int check = redirections(&cmd[i], node->next->content, rdr, lst_env);
+				if (check == 1 || check == -1)
 					return (NULL);
 				node = node->next;
 			}

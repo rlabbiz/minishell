@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 11:04:22 by ael-amin          #+#    #+#             */
-/*   Updated: 2023/06/17 16:46:20 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/17 20:28:52 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,8 +269,6 @@ char *expantion(char *str, t_list *lst_env, int check)
 		cmd = check_cmd(arg);
 	else
 		cmd = arg;
-	printf("%s\n", cmd);
-	// free(str);
 	return (cmd);
 }
 

@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/11 13:58:03 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/17 20:27:52 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,17 +96,18 @@ int	main(int ac, char **av, char **env)
 	while (line)
 	{
 		list = NULL;
-		// cmd = NULL;
+		cmd = NULL;
 		add_history(line);
 		split_cmd(line, &list);
 		free(line);
 		if (!check_node(list))
 		{
 			cmd = parser(list, lst_env);
+			
 			if (cmd)
 			{
 				print(cmd);
-				execution(cmd , &lst_env);
+				execution(cmd, &lst_env);
 			}
 		}
 		line = get_line();

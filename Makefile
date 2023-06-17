@@ -6,7 +6,7 @@
 #    By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 05:18:06 by rlabbiz           #+#    #+#              #
-#    Updated: 2023/06/09 12:06:54 by rlabbiz          ###   ########.fr        #
+#    Updated: 2023/06/17 19:49:46 by rlabbiz          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,10 @@ OBJECT = minishell_ultis.o \
 		 parser/analyzer.o \
 		 parser/parser.o \
 		 builtins/builtin1.o \
-		 execution/execution.o
+		 execution/execution.o \
+		 parser/parser_ultis.o \
+		 parser/redirection.o \
+		 parser/herdoc.o
 MAIN_FILE = minishell.c
 DEPS = minishell.h
 LIBFT = libft/libft.a

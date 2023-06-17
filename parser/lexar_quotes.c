@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 12:02:51 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/17 12:33:39 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/17 19:31:42 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,23 @@ int	check_if_quotes(char *str, int i, int *quotes)
 // 	return (1);
 // }
 
+int	find_qoutes_supp(char *str, int i, int *quotes)
+{
+	if (*quotes == 0)
+		*quotes = DOUBLE_QUOTES;
+	else if (*quotes == DOUBLE_QUOTES)
+	{
+		*quotes = 0;
+		return (0);
+	}
+	while (str[i++] != '\0')
+	{
+		if (str[i] == '\"' && *quotes == DOUBLE_QUOTES)
+			return (0);
+	}
+	return (1);
+}
+
 int	find_quotes(char *str, int i, int *quotes)
 {
 	if (str[i] == '\'')
@@ -130,18 +147,8 @@ int	find_quotes(char *str, int i, int *quotes)
 	}
 	else if (str[i] == '\"')
 	{
-		if (*quotes == 0)
-			*quotes = DOUBLE_QUOTES;
-		else if (*quotes == DOUBLE_QUOTES)
-		{
-			*quotes = 0;
-			return (0);
-		}
-		while (str[i++] != '\0')
-		{
-			if (str[i] == '\"' && *quotes == DOUBLE_QUOTES)
-				return (0);
-		}
+		if (!find_qoutes_supp(str, i, quotes))
+			return (0);	
 	}
 	return (1);
 }

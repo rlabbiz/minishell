@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:50 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/17 16:46:40 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/17 20:28:57 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,22 @@ int		check_quotes(char *input);
 int		check_if_quotes(char *str, int i, int *quotes);
 int		find_quotes(char *str, int i, int *quotes);
 void	quotes_error(int type);
-
+int		get_cmd_line(t_list *list);
+void	get_arrgs_supp(t_list *node, t_cmd *cmd, int len, int cmd_len);
+t_cmd	get_args(t_list *lst, int cmd_len);
+char	*get_herdoc(void);
+int		check_onbiges(char *file);
+void	redirections_in(t_cmd **lst, char *file);
+int		redirections_out(t_cmd **lst, char *file);
+int		redirections_append(t_cmd **lst, char *file);
+void	redirections_herdoc(t_cmd **lst);
+int		redirections(t_cmd *cmd, char *str, int rdr, t_list *lst_env);
+void	herdoc_supp(t_list *lst_env, char *herdoc, int fd, int expand);
+int		herdoc(char *file, t_list *lst_env, int expand);
+int		read_herdocs(t_list *lst, t_list *lst_env);
+void	write_expantion(t_list *lst_env, char *herdoc, int fd);
+int		parser_supp1(t_cmd **lst, t_list *node, t_list *lst_env, int i);
+int		parser_supp(t_cmd **lst, t_list *node, t_list *lst_env, int len);
 // build-in ---- env
 t_env	*get_value_of_env(t_list **lst, char *str);
 t_list	*get_env(t_list **lst, char **str);

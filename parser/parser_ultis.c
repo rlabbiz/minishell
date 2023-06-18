@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 19:35:31 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/17 19:36:18 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/18 10:26:06 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,12 @@ char	*get_herdoc(void)
 
 int	check_onbiges(char *file)
 {
-	int i = 0;
-	int len = 0;
-	char c;
+	int		i;
+	int		len;
+	char	c;
 
+	i = 0;
+	len = 0;
 	c = 1;
 	while (file[i])
 	{

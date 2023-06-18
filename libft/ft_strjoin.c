@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:57:08 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/15 15:51:36 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/18 12:44:30 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,6 @@ char	*ft_strjoin(char *s1, char *s2)
 		j++;
 	}
 	ptr[i] = '\0';
-	return (free(s1), ptr);
+	free(s1);
+	return (ptr);
 }

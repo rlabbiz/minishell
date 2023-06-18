@@ -6,7 +6,7 @@
 #    By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 05:18:06 by rlabbiz           #+#    #+#              #
-#    Updated: 2023/06/17 19:49:46 by rlabbiz          ###   ########.fr        #
+#    Updated: 2023/06/18 21:54:54 by rlabbiz          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,11 +21,17 @@ OBJECT = minishell_ultis.o \
 		 parser/lexar_quotes.o \
 		 parser/analyzer.o \
 		 parser/parser.o \
-		 builtins/builtin1.o \
-		 execution/execution.o \
+		 builtins/builtins1.o \
+		 builtins/builtins2.o \
+		 builtins/main_builtins.o \
+		 builtins/utils_builtins.o \
+		 execution/exec.o \
 		 parser/parser_ultis.o \
 		 parser/redirection.o \
-		 parser/herdoc.o
+		 parser/herdoc.o \
+		 parser/analyzer_ultis.o \
+		 parser/lexar_quotes_ultis.o \
+		 parser/expand.o
 MAIN_FILE = minishell.c
 DEPS = minishell.h
 LIBFT = libft/libft.a

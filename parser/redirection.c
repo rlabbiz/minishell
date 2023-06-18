@@ -6,13 +6,13 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 19:35:33 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/17 20:22:46 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/18 15:47:14 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void redirections_in(t_cmd **lst, char *file)
+void	redirections_in(t_cmd **lst, char *file)
 {
 	t_cmd	*cmd;
 
@@ -32,7 +32,7 @@ void redirections_in(t_cmd **lst, char *file)
 		cmd->ifd = open(file, O_WRONLY);
 }
 
-int redirections_out(t_cmd **lst, char *file)
+int	redirections_out(t_cmd **lst, char *file)
 {
 	t_cmd	*cmd;
 
@@ -60,7 +60,7 @@ int redirections_out(t_cmd **lst, char *file)
 	return (0);
 }
 
-int redirections_append(t_cmd **lst, char *file)
+int	redirections_append(t_cmd **lst, char *file)
 {
 	t_cmd	*cmd;
 
@@ -83,7 +83,7 @@ int redirections_append(t_cmd **lst, char *file)
 	return (0);
 }
 
-void redirections_herdoc(t_cmd **lst)
+void	redirections_herdoc(t_cmd **lst)
 {
 	t_cmd	*cmd;
 
@@ -97,20 +97,26 @@ void redirections_herdoc(t_cmd **lst)
 		close(cmd->ofd);
 		cmd->ofd = NONE;
 	}
+	printf("[%d]\n", cmd->herdoc);
 	cmd->outred = cmd->herdoc;
-	cmd->herdoc = 0;
 }
 
 int	redirections(t_cmd *cmd, char *str, int rdr, t_list *lst_env)
 {
-	char *old_file = expantion(str, lst_env, 1);
-	char *file;
+	char	*old_file;
+	char	*file;
+
+	old_file = expantion(str, lst_env, 1);
 	if (!old_file || check_onbiges(old_file))
 	{
+		if (old_file)
+			free(old_file);
 		printf("minishell: %s: ambiguous redirect\n", str);
-		return(-1);
+		return (-1);
 	}
 	file = check_cmd(old_file);
+	if (old_file)
+		free(old_file);
 	if (rdr == RDR_IN)
 		redirections_in(&cmd, file);
 	else if (rdr == RDR_OUT && redirections_out(&cmd, file))
@@ -119,5 +125,7 @@ int	redirections(t_cmd *cmd, char *str, int rdr, t_list *lst_env)
 		return (1);
 	else if (rdr == RDR_HERDOC)
 		redirections_herdoc(&cmd);
+	if (file)
+		free(file);
 	return (0);
 }

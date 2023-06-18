@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/17 20:27:52 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/18 22:43:10 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,42 @@ int ft_check_command(char *path, char *line)
 	}
 	free(command);
 	return (0);
+}
+
+void ft_free_split(char **split)
+{
+	int	i;
+
+	i = 0;
+	while (split[i])
+	{
+		free(split[i]);
+		i++;
+	}
+	free(split);
+}
+
+void	ft_free_cmd(t_cmd *cmd)
+{
+	int	i;
+	int	len;
+
+	i = 0;
+	len = cmd[0].cmd_len;
+	while (i < len)
+	{
+		ft_free_split(cmd[i].args);
+		i++;
+	}
+	free(cmd);
+}
+
+void ft_free_env(void *data)
+{
+	t_env *env = data;
+	free(env->name);
+	free(env->value);
+	free(env);
 }
 
 void print(t_cmd *cmd)
@@ -60,35 +96,36 @@ void print(t_cmd *cmd)
 
 char *get_line(void)
 {
-	char *prompt;
-	char *line;
+	char	*prompt;
+	char	*line;
+
 	prompt = ft_strdup("minishell$ ");
 	line = readline(prompt);
 	if (line == NULL)
 	{
-		free(prompt);
+		free (prompt);
 		return (NULL);
 	}
 	while (line[0] == '\0')
 	{
-		free(line);
+		free (line);
 		line = readline(prompt);
 		if (line == NULL)
 		{
-			free(prompt);
+			free (prompt);
 			return (NULL);
 		}
 	}
-	free(prompt);
+	free (prompt);
 	return (line);
 }
 
 int	main(int ac, char **av, char **env)
 {
-	char *line;
-	t_list *list;
-	t_cmd *cmd;
-	t_list *lst_env;
+	char	*line; // is freed
+	t_list	*list; // is freed
+	t_cmd	*cmd; // must free
+	t_list	*lst_env; // must free
 
 	av += ac;
 	lst_env = get_env(&lst_env, env);
@@ -96,21 +133,27 @@ int	main(int ac, char **av, char **env)
 	while (line)
 	{
 		list = NULL;
-		cmd = NULL;
+		// cmd = NULL;
 		add_history(line);
 		split_cmd(line, &list);
 		free(line);
-		if (!check_node(list))
+		if (list)
 		{
-			cmd = parser(list, lst_env);
-			
-			if (cmd)
+			if (!check_node(list))
 			{
-				print(cmd);
-				execution(cmd, &lst_env);
+				cmd = parser(list, lst_env);
+				ft_lstclear(&list, ft_del);
+				if (cmd)
+				{
+					// print(cmd);
+					exec(cmd, &lst_env, env);
+					ft_free_cmd(cmd);
+				}
 			}
 		}
+		// while (1);
 		line = get_line();
 	}
+	// ft_lstclear(&lst_env, &ft_free_env);
 	return (0);
 }

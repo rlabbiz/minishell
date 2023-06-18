@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 19:45:45 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/17 20:02:33 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/18 20:43:15 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,7 @@
 void	herdoc_supp(t_list *lst_env, char *herdoc, int fd, int expand)
 {
 	if (expand == 0)
-	{
 		ft_putstr_fd(herdoc, fd);
-		ft_putstr_fd("\n", fd);
-	}
 	else if (expand == 1)
 		write_expantion(lst_env, herdoc, fd);
 }
@@ -27,6 +24,7 @@ int	herdoc(char *file, t_list *lst_env, int expand)
 {
 	int		fd[2];
 	char	*herdoc;
+
 	if (pipe(fd) == -1)
 		exit(1);
 	herdoc = readline("> ");
@@ -36,7 +34,10 @@ int	herdoc(char *file, t_list *lst_env, int expand)
 			&& ft_strlen(herdoc) == ft_strlen(file))
 			break ;
 		else
+		{
 			herdoc_supp(lst_env, herdoc, fd[1], expand);
+			ft_putstr_fd("\n", fd[1]);
+		}
 		free(herdoc);
 		herdoc = readline("> ");
 	}
@@ -51,6 +52,7 @@ int	read_herdocs(t_list *lst, t_list *lst_env)
 	t_list	*node;
 	int		fd;
 	int		expand;
+	char	*file;
 
 	node = lst;
 	fd = -1;
@@ -65,9 +67,14 @@ int	read_herdocs(t_list *lst, t_list *lst_env)
 				expand = 0;
 			else
 				expand = 1;
-			if (fd != -1)
-				close(fd);
-			fd = herdoc(check_cmd(node->content), lst_env, expand);
+			file = check_cmd(node->content);
+			if (file)
+			{
+				if (fd != -1)
+					close(fd);
+				fd = herdoc(file, lst_env, expand);
+				free(file);
+			}
 		}
 		node = node->next;
 	}

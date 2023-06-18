@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 12:02:51 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/17 19:31:42 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/18 10:13:57 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,56 +59,6 @@ int	check_quotes(char *input)
 	return (1);
 }
 
-int	check_if_quotes(char *str, int i, int *quotes)
-{
-	if (*quotes != 0)
-	{
-		if (str[i] == '\'' && *quotes == SINGLE_QUOTES)
-		{
-			*quotes = 0;
-			if (str[i + 1] == '\0' || str[i + 1] == ' ' || str[i + 1] == '\t')
-				return (1);
-		}
-		else if (str[i] == '\"' && *quotes == DOUBLE_QUOTES)
-		{
-			*quotes = 0;
-			if (str[i + 1] == '\0' || str[i + 1] == ' ' || str[i + 1] == '\t')
-				return (1);
-		}
-	}
-	else if (*quotes == 0)
-	{
-		if (str[i] == '\'')
-			*quotes = SINGLE_QUOTES;
-		else if (str[i] == '\"')
-			*quotes = DOUBLE_QUOTES;
-	}
-	return (0);
-}
-
-// int	find_quotes_supp(char *str, int i, int **quo)
-// {
-// 	int *quotes = *quo;
-// 	if (str[i] == '\'')
-// 	{
-// 		if (*quotes == 0)
-// 			*quotes = SINGLE_QUOTES;
-// 		else if (*quotes == SINGLE_QUOTES)
-// 		{
-// 			*quotes = 0;
-// 			return (0);
-// 		}
-// 		else if (*quotes == DOUBLE_QUOTES)
-// 			return (1);
-// 		while (str[i++] != '\0')
-// 		{
-// 			if (str[i++] == '\'' && *quotes == SINGLE_QUOTES)
-// 				return (0);
-// 		}
-// 	}
-// 	return (1);
-// }
-
 int	find_qoutes_supp(char *str, int i, int *quotes)
 {
 	if (*quotes == 0)
@@ -148,7 +98,7 @@ int	find_quotes(char *str, int i, int *quotes)
 	else if (str[i] == '\"')
 	{
 		if (!find_qoutes_supp(str, i, quotes))
-			return (0);	
+			return (0);
 	}
 	return (1);
 }

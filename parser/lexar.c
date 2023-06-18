@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:44:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/17 11:12:12 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/18 09:54:11 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ char	*split_cmd_supp(char *input, int *i, int *quotes, int check)
 {
 	char	*cmd;
 	int		start;
-	char 	c;
-	
+	char	c;
+
 	if (check == 0)
 	{
 		start = *i;
@@ -77,7 +77,6 @@ char	*split_cmd_supp(char *input, int *i, int *quotes, int check)
 	}
 	return (cmd);
 }
-
 
 void	split_cmd(char *input, t_list **list)
 {

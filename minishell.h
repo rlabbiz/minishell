@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:50 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/17 20:28:57 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/18 22:39:48 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,14 @@ typedef struct s_env
 	char *value;
 }	t_env;
 
+/*Global var*/
+int		status;
+
 // split and get token from command
 void	split_cmd(char *input, t_list **list);
 void	print_stack(t_list *node);
 void	ft_del(void *data);
-int		check_quotes(char *input);
+void	ft_free_split(char **split);
 
 // analyze the command
 int		check_node(t_list *list);
@@ -92,21 +95,43 @@ void	herdoc_supp(t_list *lst_env, char *herdoc, int fd, int expand);
 int		herdoc(char *file, t_list *lst_env, int expand);
 int		read_herdocs(t_list *lst, t_list *lst_env);
 void	write_expantion(t_list *lst_env, char *herdoc, int fd);
-int		parser_supp1(t_cmd **lst, t_list *node, t_list *lst_env, int i);
-int		parser_supp(t_cmd **lst, t_list *node, t_list *lst_env, int len);
+int		syntax_error_supp(t_list *node);
+int		syntax_error(t_list *node);
+int		check_pipe(char *data, int first);
+int		rdr_error(char *data);
+int		check_rdr(char *data);
+int		check_node(t_list *list);
+void	check_quotes_supp(char *input, int *i, int *quotes);
+int		find_qoutes_supp(char *str, int i, int *quotes);
+char	*ft_chardup(char c);
+t_list	*write_expantion_on_lst(t_list *lst_env, char *str);
+char *expantion(char *str, t_list *lst_env, int check);
+t_list *join_arr_to_lst(char **args);
+char **join_lst_to_arr(t_list *lst);
+void expand(t_cmd **list, t_list *lst_env);
+
+
+
 // build-in ---- env
-t_env	*get_value_of_env(t_list **lst, char *str);
+t_env	*get_line_of_env(t_list **lst, char *str);
 t_list	*get_env(t_list **lst, char **str);
 char	*get_env_value(t_list *lst, char *name);
-void	export_env(t_list **lst, char *old_str);
-void	del_env(void *ptr);
+void	add_var_to_env(t_list **lst, char *old_str);
+void	free_env(void *ptr);
 void	unset_env(t_list **lst, char *name);
 void	print_env(t_list *lst);
+int		exec_cd(t_cmd cmd, t_list *list_env);
+int		exec_echo(char **args, int type, int fd);
+int		exec_pwd(t_list *env);
+int		exec_env(t_cmd cmd, t_list **lst_env);
+int		exec_export(t_cmd cmd, t_list **lst_env);
+int		exec_unset(t_cmd cmd, t_list **lst_env);
+int		builtins(t_cmd *cmd, t_list **lst_env);
+void	exec_cmd(t_cmd *cmd, t_list **lst_env, char **env);
+void	pipeline(t_cmd	*cmd, t_list **lst_env);
 
-// excuetion
-void	execution(t_cmd *cmd, t_list **lst_env);
-char	*expantion(char *str, t_list *lst_env, int check);
-t_list	*write_expantion_on_lst(t_list *lst_env, char *str);
+// execution
+void	exec(t_cmd *cmd, t_list **lst_env, char **env);
 
 
 #endif

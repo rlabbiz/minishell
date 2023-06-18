@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin1.c                                         :+:      :+:    :+:   */
+/*   builtins1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 16:30:22 by ael-amin          #+#    #+#             */
-/*   Updated: 2023/06/10 21:24:08 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/18 21:31:30 by ael-amin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../minishell.h"
 
-int env_is_valid(t_list *lst, char *name)
+int	env_is_valid(t_list *lst, char *name)
 {
 	char	*env;
 
@@ -23,7 +22,7 @@ int env_is_valid(t_list *lst, char *name)
 	return (0);
 }
 
-t_env *get_value_of_env(t_list **lst, char *str)
+t_env	*get_line_of_env(t_list **lst, char *str)
 {
 	t_env	*env;
 	int		i;
@@ -58,7 +57,7 @@ t_env *get_value_of_env(t_list **lst, char *str)
 	return (env);
 }
 
-t_list	*get_env(t_list **lst, char **str)
+t_list	*get_env(t_list **lst, char **str) //env
 {
 	t_list	*lst_env;
 	int		i;
@@ -66,53 +65,30 @@ t_list	*get_env(t_list **lst, char **str)
 	i = 0;
 	while (str[i])
 	{
-		ft_lstadd_back(&lst_env, ft_lstnew(get_value_of_env(lst, str[i])));
+		ft_lstadd_back(&lst_env, ft_lstnew(get_line_of_env(lst, str[i])));
 		i++;
 	}
 	return (lst_env);
 }
 
-char *get_env_value(t_list *lst, char *name)
-{
-	t_list	*node;
-	t_env	*env;
+// char	*get_env_value(t_list *lst, char *name) // name return value
+// {
+// 	t_list	*node;
+// 	t_env	*env;
 
-	node = lst;
-	if (!name)
-		return (NULL);
-	while (node)
-	{
-		env = node->content;
-		if (ft_strlen(name) == ft_strlen(env->name))
-			if (ft_strncmp(env->name, name, ft_strlen(name)) == 0)
-				return (env->value);
-		node = node->next;
-	}
-	return (NULL);
-}
-
-void	export_env(t_list **lst, char *old_str)
-{
-	char	*str;
-	t_env	*env;
-
-	str = check_cmd(old_str);
-	env = get_value_of_env(lst, str);
-	if (env)
-		ft_lstadd_back(lst, ft_lstnew(env));
-	// printf("*%s*\n", str);
-	free(str);
-}
-
-void del_env(void *ptr)
-{
-	t_env	*env;
-
-	env = ptr;
-	free(env->name);
-	free(env->value);
-	free(env);
-}
+// 	node = lst;
+// 	if (!name)
+// 		return (NULL);
+// 	while (node)
+// 	{
+// 		env = node->content;
+// 		if (ft_strlen(name) == ft_strlen(env->name))
+// 			if (ft_strncmp(env->name, name, ft_strlen(name)) == 0)
+// 				return (env->value);
+// 		node = node->next;
+// 	}
+// 	return (NULL);
+// }
 
 void	unset_env(t_list **lst, char *name)
 {
@@ -129,7 +105,7 @@ void	unset_env(t_list **lst, char *name)
 	if (ft_strncmp(env->name, name, ft_strlen(env->name)) == 0 && ft_strlen(env->name) == ft_strlen(name))
 	{
 		*lst = node->next;
-		ft_lstdelone(node, del_env);
+		ft_lstdelone(node, free_env);
 		return ;
 	}
 	while (node)
@@ -139,7 +115,7 @@ void	unset_env(t_list **lst, char *name)
 		if (ft_strncmp(env->name, name, ft_strlen(env->name)) == 0 && ft_strlen(env->name) == ft_strlen(name))
 		{
 			prive->next = node->next;
-			ft_lstdelone(node, del_env);
+			ft_lstdelone(node, free_env);
 		}
 		else
 			prive = node;
@@ -147,16 +123,3 @@ void	unset_env(t_list **lst, char *name)
 	}
 }
 
-void	print_env(t_list *lst)
-{
-	t_list	*node;
-	t_env	*env;
-
-	node = lst;
-	while (node)
-	{
-		env = node->content;
-		printf("%s=%s\n", env->name, env->value);
-		node = node->next;
-	}
-}

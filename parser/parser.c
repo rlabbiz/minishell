@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 19:48:48 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/10 16:48:13 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/17 17:35:40 by ael-amin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,10 @@ int	redirections(t_cmd *cmd, char *file, int rdr)
 			close(cmd->inred);
 			cmd->inred = NONE;
 		}
-		cmd->ifd = open(file, O_RDWR | O_TRUNC | O_CREAT);
+		if (access(file, F_OK) == -1)
+       	 cmd->ifd = open(file, O_CREAT | O_WRONLY);
+		else
+			cmd->ifd = open(file, O_WRONLY);
 	}
 	else if (rdr == RDR_OUT)
 	{
@@ -155,7 +158,7 @@ int	redirections(t_cmd *cmd, char *file, int rdr)
 			cmd->ofd = NONE;
 		}
 		cmd->outred = cmd->herdoc;
-		cmd->herdoc = 0;
+		cmd->herdoc = -1;
 	}
 	return (0);
 }

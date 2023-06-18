@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/11 13:58:03 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/17 16:00:00 by ael-amin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,10 +106,11 @@ int	main(int ac, char **av, char **env)
 			if (cmd)
 			{
 				print(cmd);
-				execution(cmd , &lst_env);
+				exec(cmd , &lst_env);
 			}
 		}
 		line = get_line();
+		printf("%s\n", line);
 	}
 	return (0);
 }

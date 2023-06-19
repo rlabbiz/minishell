@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 19:35:33 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/18 15:47:14 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/19 13:04:59 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ void	redirections_herdoc(t_cmd **lst)
 		close(cmd->ofd);
 		cmd->ofd = NONE;
 	}
-	printf("[%d]\n", cmd->herdoc);
 	cmd->outred = cmd->herdoc;
 }
 

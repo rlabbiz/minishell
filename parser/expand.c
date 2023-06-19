@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 20:24:00 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/18 22:39:53 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/19 16:17:22 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,23 +218,22 @@ char **join_lst_to_arr(t_list *lst)
 	arr = (char **)malloc(sizeof(char *) * len + 1);
 	i = 0;
 	node = new;
-	while (i < len && node)
+	while (i < len)
 	{
 		arr[i] = ft_strdup(node->content);
 		i++;
 		node = node->next;
 	}
-	
+	arr[i] = NULL;
 	return (arr);
 }
 
 void expand(t_cmd **list, t_list *lst_env)
 {
-	t_cmd *cmd = *list;
+
 	char c;
 	t_list *command = NULL;
-	
-	command = join_arr_to_lst(cmd->args);
+	command = join_arr_to_lst((*list)->args);
 	if (!command)
 		return ;
 	t_list *node = NULL;
@@ -245,6 +244,6 @@ void expand(t_cmd **list, t_list *lst_env)
 		node->content = expantion(node->content, lst_env, 1);
 		node = node->next;
 	}
-	ft_free_split(cmd->args);
+	// ft_free_split(cmd->args);
 	(*list)->args = join_lst_to_arr(command);
 }

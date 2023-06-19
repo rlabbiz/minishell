@@ -6,13 +6,13 @@
 #    By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 05:18:06 by rlabbiz           #+#    #+#              #
-#    Updated: 2023/06/18 21:54:54 by rlabbiz          ###   ########.fr        #
+#    Updated: 2023/06/19 12:00:29 by rlabbiz          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror# -fsanitize=address -g 
 OBJECT = minishell_ultis.o \
 		 check_args.o \
 		 prompt.o \
@@ -21,7 +21,7 @@ OBJECT = minishell_ultis.o \
 		 parser/lexar_quotes.o \
 		 parser/analyzer.o \
 		 parser/parser.o \
-		 builtins/builtins1.o \
+		 builtins/get_the_env.o \
 		 builtins/builtins2.o \
 		 builtins/main_builtins.o \
 		 builtins/utils_builtins.o \

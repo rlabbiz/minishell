@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:44:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/18 09:54:11 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/19 11:14:08 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ char	*check_cmd(char *old_cmd)
 	int		j;
 	int		quotes;
 
+	if (!old_cmd)
+		return (NULL);
 	new_cmd = malloc(sizeof(char ) * ft_strlen(old_cmd) + 1);
 	i = 0;
 	j = 0;

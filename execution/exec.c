@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 11:04:22 by ael-amin          #+#    #+#             */
-/*   Updated: 2023/06/18 22:43:13 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/19 15:53:44 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ char	*path_cmd(char *s, t_list *lst)
 
 	i = 0;
 	path = ft_split(get_env_value(lst, "PATH"), ':');
+	if (!path)
+		return (NULL);
 	while (path[i])
 	{
 		cmd = ft_strjoin(path[i], "/");
@@ -74,6 +76,36 @@ void	setup_red(t_cmd *node)
 		dup2(node->outred, STDIN_FILENO);
 }
 
+int is_not_fork(t_cmd *cmd, t_list **lst_env)
+{
+	if (!ft_strncmp(cmd->args[0], "cd", 2) && ft_strlen(cmd->args[0]) == 2)
+	{
+		builtins(cmd, lst_env);
+		return (1);
+	}
+	else if (!ft_strncmp(cmd->args[0], "export", 6) && ft_strlen(cmd->args[0]) == 6)
+	{
+		builtins(cmd, lst_env);
+		return (1);
+	}
+	else if (!ft_strncmp(cmd->args[0], "env", 3) && ft_strlen(cmd->args[0]) == 3)
+	{
+		builtins(cmd, lst_env);
+		return (1);
+	}
+	else if (!ft_strncmp(cmd->args[0], "unset", 5) && ft_strlen(cmd->args[0]) == 5)
+	{
+		builtins(cmd, lst_env);
+		return (1);
+	}
+	else if (!ft_strncmp(cmd->args[0], "exit", 4) && ft_strlen(cmd->args[0]) == 4)
+	{
+		builtins(cmd, lst_env);
+		return (1);
+	}
+	return (0);
+}
+
 void	exec_cmd(t_cmd *cmd, t_list **lst_env, char **env)
 {
 	int		i;
@@ -81,12 +113,24 @@ void	exec_cmd(t_cmd *cmd, t_list **lst_env, char **env)
 	pid_t	child_ps;
 	
 	i = 0;
-	// expand(&cmd, *lst_env);
-
-	if (!ft_strncmp(cmd->args[0], "cd", 2))
-		builtins(cmd, lst_env);
-	else if (!ft_strncmp(cmd->args[0], "export", 6))
-		builtins(cmd, lst_env);
+	expand(&cmd, *lst_env);
+	// printf("%s\n", cmd->args[1]);
+	if (!cmd->args || !cmd->args[0])
+		return ;
+	// child_ps = malloc(sizeof(int ) * cmd->cmd_len);
+	// if (access(s, F_OK) == 0)
+	// {
+	// 	if (access(s, X_OK) == 0)
+	// 		return (s);
+	// 	else
+	// 	{
+	// 		printf("bash: %s: Permission denied\n", s);
+	// 		return (NULL);
+	// 	}
+	// }
+	
+	if (is_not_fork(cmd, lst_env))
+		return ;
 	else
 	{
 		check = path_cmd(cmd->args[0], *lst_env);
@@ -103,15 +147,16 @@ void	exec_cmd(t_cmd *cmd, t_list **lst_env, char **env)
 						exit(builtins(&cmd[i], lst_env));
 					}
 					execve(check, cmd->args, env);
+					exit (1); //is execve failed
 				}
 				else
 				{
 					waitpid(child_ps, &status, 0);
 					status = status >> 8;
 				}
-				// waitpid(child_ps, &status, 0);
 				i++;
 			}
+			
 		}
 		else
 		{
@@ -132,10 +177,12 @@ void	pipeline(t_cmd	*cmd, t_list **lst_env)
 
 	i = 0;
 	len = cmd[0].cmd_len;
-	pid = malloc(len);
+	pid = malloc(sizeof(int) * len);
 	while (i < len)
 	{
 		check = path_cmd(cmd[i].args[0], *lst_env);
+		t_cmd *env = &cmd[i]; 
+		expand(&env, *lst_env);
 		if (check)
 		{
 			pipe(pipefd);
@@ -143,7 +190,7 @@ void	pipeline(t_cmd	*cmd, t_list **lst_env)
 			if (pid[i] == 0)
 			{
 				dup2(tmp, 0);
-				if (i < cmd[0].cmd_len - 1)
+				if (i < len - 1)
 				{
 					dup2(pipefd[1], 1);
 					close(pipefd[1]);
@@ -154,23 +201,30 @@ void	pipeline(t_cmd	*cmd, t_list **lst_env)
 					exit (builtins(&cmd[i], lst_env));
 				}
 				else
+				{
 					execve(check, cmd[i].args, NULL);
+					perror(0);
+					exit(1);
+				}
 			}
 			else
 			{
 				if (tmp != 0)
 					close(tmp);
-				if (i == cmd[i].cmd_len - 1)
+				if (i == len - 1)
 					close(pipefd[0]);
 				tmp = pipefd[0];
 				close(pipefd[1]);
-				waitpid(pid[i], &status, 0);
 			}
 		}
 		else
 			printf("minishell: command not found: %s\n", cmd[i].args[0]);
 		i++;
 	}
+	i = -1;
+	while (++i < len)
+		waitpid(pid[i], &global.status, 0);
+	global.status = global.status >> 8;
 	free(pid);
 }
 
@@ -181,6 +235,7 @@ void exec(t_cmd *cmd, t_list **lst_env, char **env)
 	if (!cmd || !lst_env)
 		return ;
 	len = cmd[0].cmd_len;
+
 	if (len == 1)
 	{
 		exec_cmd(&cmd[0], lst_env, env);

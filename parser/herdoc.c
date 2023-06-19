@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 19:45:45 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/18 20:43:15 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/19 14:36:36 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ int	herdoc(char *file, t_list *lst_env, int expand)
 
 	if (pipe(fd) == -1)
 		exit(1);
-	herdoc = readline("> ");
+	int input = dup(0);
+	global.herdoc = input;
+	herdoc = get_next_line(input);
+	herdoc = ft_strtrim(herdoc, "\n");
 	while (herdoc)
 	{
 		if (ft_strncmp(herdoc, file, ft_strlen(file)) == 0
@@ -39,7 +42,8 @@ int	herdoc(char *file, t_list *lst_env, int expand)
 			ft_putstr_fd("\n", fd[1]);
 		}
 		free(herdoc);
-		herdoc = readline("> ");
+		herdoc = get_next_line(input);
+		herdoc = ft_strtrim(herdoc, "\n");
 	}
 	close(fd[1]);
 	if (herdoc)
@@ -73,6 +77,8 @@ int	read_herdocs(t_list *lst, t_list *lst_env)
 				if (fd != -1)
 					close(fd);
 				fd = herdoc(file, lst_env, expand);
+				if (global.herdoc == -2)
+					break ;
 				free(file);
 			}
 		}

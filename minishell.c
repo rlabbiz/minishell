@@ -6,11 +6,13 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/18 22:43:10 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/19 15:49:41 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// g_global global;
 
 void	ft_del(void *data)
 {
@@ -36,7 +38,7 @@ void ft_free_split(char **split)
 	int	i;
 
 	i = 0;
-	while (split[i])
+	while (split && split[i])
 	{
 		free(split[i]);
 		i++;
@@ -120,6 +122,16 @@ char *get_line(void)
 	return (line);
 }
 
+void handler(int sig)
+{
+	(void)sig;
+	if (global.herdoc != -1)
+	{
+		close(global.herdoc);
+		global.herdoc = -2;
+	}
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char	*line; // is freed
@@ -127,9 +139,11 @@ int	main(int ac, char **av, char **env)
 	t_cmd	*cmd; // must free
 	t_list	*lst_env; // must free
 
+	global.herdoc = -1;
 	av += ac;
 	lst_env = get_env(&lst_env, env);
 	line = get_line();
+	signal(SIGINT, handler);
 	while (line)
 	{
 		list = NULL;
@@ -145,7 +159,7 @@ int	main(int ac, char **av, char **env)
 				ft_lstclear(&list, ft_del);
 				if (cmd)
 				{
-					// print(cmd);
+					print(cmd);
 					exec(cmd, &lst_env, env);
 					ft_free_cmd(cmd);
 				}

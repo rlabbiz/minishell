@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:50 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/18 22:39:48 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/19 13:45:22 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
+#include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -54,6 +55,14 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
+typedef struct g_global
+{
+	int status;
+	int herdoc;
+}	g_global;
+
+int status;
+
 typedef struct s_env
 {
 	char *name;
@@ -61,7 +70,7 @@ typedef struct s_env
 }	t_env;
 
 /*Global var*/
-int		status;
+g_global global;
 
 // split and get token from command
 void	split_cmd(char *input, t_list **list);
@@ -110,8 +119,6 @@ t_list *join_arr_to_lst(char **args);
 char **join_lst_to_arr(t_list *lst);
 void expand(t_cmd **list, t_list *lst_env);
 
-
-
 // build-in ---- env
 t_env	*get_line_of_env(t_list **lst, char *str);
 t_list	*get_env(t_list **lst, char **str);
@@ -132,6 +139,5 @@ void	pipeline(t_cmd	*cmd, t_list **lst_env);
 
 // execution
 void	exec(t_cmd *cmd, t_list **lst_env, char **env);
-
 
 #endif

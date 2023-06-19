@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   builtins2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 13:10:03 by ael-amin          #+#    #+#             */
-/*   Updated: 2023/06/18 21:34:30 by ael-amin         ###   ########.fr       */
+/*   Updated: 2023/06/18 22:49:01 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	exec_echo(char **args, int type, int fd)
+int	exec_echo(char **args, int type, int fd) // khasha un case
 {
 	int	i;
 	int	check;
@@ -130,81 +130,3 @@ int	exec_unset(t_cmd cmd, t_list **lst_env)
 	}
 	return (0);
 }
-
-// int	builtins(t_cmd *cmd, t_list **lst_env)
-// {
-// 	if (!ft_strncmp(cmd->args[0], "env", 3) && ft_strlen(cmd->args[0]) == 3)
-// 		exec_env(*cmd, lst_env);
-// 	else if (!ft_strncmp(cmd->args[0], "export", 6)
-// 		&& ft_strlen(cmd->args[0]) == 6)
-// 		exec_export(*cmd, lst_env);
-// 	else if (!ft_strncmp(cmd->args[0], "unset", 5)
-// 		&& ft_strlen(cmd->args[0]) == 5)
-// 		exec_unset(*cmd, lst_env);
-// 	else if (!ft_strncmp(cmd->args[0], "echo", 4)
-// 		&& ft_strlen(cmd->args[0]) == 4)
-// 		exec_echo((*cmd).args + 1, 0 ,0);
-// 	else if (!ft_strncmp(cmd->args[0], "exit", 4)
-// 		&& ft_strlen(cmd->args[0]) == 4)
-// 		exit(0);
-// 	else if (!ft_strncmp(cmd->args[0], "pwd", 3)
-// 		&& ft_strlen(cmd->args[0]) == 3)
-// 		exec_pwd(*lst_env);
-// 	else if (!ft_strncmp(cmd->args[0], "cd", 2) && ft_strlen(cmd->args[0]) == 2)
-// 		exec_cd(*cmd, *lst_env);
-// 	return (0);
-// }
-
-// int	not_builtins_cmd(t_cmd *cmd, t_list **lst_env)
-// {
-// 	(void)cmd;
-// 	(void)lst_env;
-// 	int i;
-// 	pid_t fd;
-// 	char *spt;
-// 	char *path;
-
-// 	spt = getenv("PATH");
-// 	fd = fork();
-// 	while(spt[i])
-// 	{
-// 		path = strjoin(path, spt[0]);
-// 		path = strjoin(path, "/");
-// 		path = strjoin(path, cmd->args[0]);
-// 		if(fd == 0)
-// 		{
-// 			if (state(path))
-// 			{
-// 				if (access(path, X_OK))
-// 				{
-// 					exeve(path);
-// 				}
-// 			}
-// 		else
-
-// 		}
-// 		i++;
-// 	}
-// 	else
-// 	return (1);
-// }
-
-// void	one_cmd(t_cmd *cmd, t_list **lst_env)
-// {
-// 	if (!cmd->args || !cmd->args[0])
-// 		return ;
-// 	if (builtins(cmd, lst_env))
-// 		return ;
-// 	exec_cmd(cmd , lst_env);
-// }
-
-// void multi_cmd(t_cmd *cmd, t_list **lst_env)
-// {
-// 	int	i;
-// 	int len;
-
-// 	i = 0;
-// 	len = cmd[0].cmd_len;
-// 	(void)lst_env;
-// 	** khasnii nkhchi builtins f pipe **
-// }

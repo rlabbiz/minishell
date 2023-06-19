@@ -6,7 +6,7 @@
 /*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 08:56:04 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/15 15:49:20 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/19 13:32:06 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ typedef struct s_list
 	void			*content;
 	struct s_list	*next;
 }	t_list;
+
+#define BUFFER_SIZE 1
 
 size_t	ft_strlen(const char *str);
 int		ft_isalpha(int arg);
@@ -64,5 +66,6 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstlast(t_list *lst);
 int		ft_lstsize(t_list *lst);
+char	*get_next_line(int fd);
 
 #endif

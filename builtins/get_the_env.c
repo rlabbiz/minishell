@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 16:30:22 by ael-amin          #+#    #+#             */
-/*   Updated: 2023/06/18 21:31:30 by ael-amin         ###   ########.fr       */
+/*   Updated: 2023/06/19 10:57:58 by rlabbiz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,11 @@ int	env_is_valid(t_list *lst, char *name)
 	return (0);
 }
 
-t_env	*get_line_of_env(t_list **lst, char *str)
+t_env	*get_line_of_env(t_list **lst, char *line)
 {
 	t_env	*env;
 	int		i;
+	char *str = line;
 
 	env = malloc(sizeof(t_env));
 	i = 0;
@@ -37,8 +38,14 @@ t_env	*get_line_of_env(t_list **lst, char *str)
 	while (str[i] && str[i] != '=')
 		i++;
 	env->name = ft_substr(str, 0, i);
+	if (!env->name)
+		return (NULL);
 	if (str[i] && str[i] == '=' && !str[i + 1])
-		env->value = ft_strdup("");
+	{
+		env->value = ft_strdup("\0");
+		if (!env->value)
+			return (NULL);
+	}
 	else
 	{
 		while (*str && *str != '=')
@@ -46,14 +53,14 @@ t_env	*get_line_of_env(t_list **lst, char *str)
 		if (*str && *str == '=')
 			str++;
 		if (*str)
+		{
 			env->value = ft_substr(str, 0, ft_strlen(str));
+			if (!env->value)
+				return (NULL);	
+		}
 	}
 	if (get_env_value(*lst, env->name))
-	{
-		// printf("here\n");
 		unset_env(lst, env->name);
-	}
-	// printf("pleas\n");
 	return (env);
 }
 
@@ -70,25 +77,6 @@ t_list	*get_env(t_list **lst, char **str) //env
 	}
 	return (lst_env);
 }
-
-// char	*get_env_value(t_list *lst, char *name) // name return value
-// {
-// 	t_list	*node;
-// 	t_env	*env;
-
-// 	node = lst;
-// 	if (!name)
-// 		return (NULL);
-// 	while (node)
-// 	{
-// 		env = node->content;
-// 		if (ft_strlen(name) == ft_strlen(env->name))
-// 			if (ft_strncmp(env->name, name, ft_strlen(name)) == 0)
-// 				return (env->value);
-// 		node = node->next;
-// 	}
-// 	return (NULL);
-// }
 
 void	unset_env(t_list **lst, char *name)
 {

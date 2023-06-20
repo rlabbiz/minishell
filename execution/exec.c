@@ -3,18 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 11:04:22 by ael-amin          #+#    #+#             */
-/*   Updated: 2023/06/19 15:53:44 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/19 20:27:57 by ael-amin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-/*
-
-*/
 
 char	*path_cmd(char *s, t_list *lst)
 {
@@ -39,25 +35,6 @@ char	*path_cmd(char *s, t_list *lst)
 	return (NULL);
 }
 
-int	is_builtins(char *cmd)
-{
-	if (!ft_strncmp(cmd, "env", 3) && ft_strlen(cmd) == 3)
-		return (1);
-	else if (!ft_strncmp(cmd, "export", 6) && ft_strlen(cmd) == 6)
-		return (1);
-	else if (!ft_strncmp(cmd, "unset", 5) && ft_strlen(cmd) == 5)
-		return (1);
-	else if (!ft_strncmp(cmd, "echo", 4) && ft_strlen(cmd) == 4)
-		return (1);
-	else if (!ft_strncmp(cmd, "exit", 4) && ft_strlen(cmd) == 4)
-		return (1);
-	else if (!ft_strncmp(cmd, "pwd", 3) && ft_strlen(cmd) == 3)
-		return (1);
-	else if (!ft_strncmp(cmd, "cd", 2) && ft_strlen(cmd) == 2)
-		return (1);
-	return (0);
-}
-
 void	setup_red(t_cmd *node)
 {
 	if (node->ofd != 0)
@@ -76,42 +53,12 @@ void	setup_red(t_cmd *node)
 		dup2(node->outred, STDIN_FILENO);
 }
 
-int is_not_fork(t_cmd *cmd, t_list **lst_env)
-{
-	if (!ft_strncmp(cmd->args[0], "cd", 2) && ft_strlen(cmd->args[0]) == 2)
-	{
-		builtins(cmd, lst_env);
-		return (1);
-	}
-	else if (!ft_strncmp(cmd->args[0], "export", 6) && ft_strlen(cmd->args[0]) == 6)
-	{
-		builtins(cmd, lst_env);
-		return (1);
-	}
-	else if (!ft_strncmp(cmd->args[0], "env", 3) && ft_strlen(cmd->args[0]) == 3)
-	{
-		builtins(cmd, lst_env);
-		return (1);
-	}
-	else if (!ft_strncmp(cmd->args[0], "unset", 5) && ft_strlen(cmd->args[0]) == 5)
-	{
-		builtins(cmd, lst_env);
-		return (1);
-	}
-	else if (!ft_strncmp(cmd->args[0], "exit", 4) && ft_strlen(cmd->args[0]) == 4)
-	{
-		builtins(cmd, lst_env);
-		return (1);
-	}
-	return (0);
-}
-
 void	exec_cmd(t_cmd *cmd, t_list **lst_env, char **env)
 {
 	int		i;
 	char	*check;
-	pid_t	child_ps;
-	
+	int		child_ps;
+
 	i = 0;
 	expand(&cmd, *lst_env);
 	// printf("%s\n", cmd->args[1]);
@@ -128,8 +75,7 @@ void	exec_cmd(t_cmd *cmd, t_list **lst_env, char **env)
 	// 		return (NULL);
 	// 	}
 	// }
-	
-	if (is_not_fork(cmd, lst_env))
+	if (cmd_in_parent(cmd, lst_env))
 		return ;
 	else
 	{
@@ -156,7 +102,6 @@ void	exec_cmd(t_cmd *cmd, t_list **lst_env, char **env)
 				}
 				i++;
 			}
-			
 		}
 		else
 		{
@@ -181,7 +126,7 @@ void	pipeline(t_cmd	*cmd, t_list **lst_env)
 	while (i < len)
 	{
 		check = path_cmd(cmd[i].args[0], *lst_env);
-		t_cmd *env = &cmd[i]; 
+		t_cmd *env = &cmd[i];
 		expand(&env, *lst_env);
 		if (check)
 		{
@@ -228,14 +173,13 @@ void	pipeline(t_cmd	*cmd, t_list **lst_env)
 	free(pid);
 }
 
-void exec(t_cmd *cmd, t_list **lst_env, char **env)
+void	exec(t_cmd *cmd, t_list **lst_env, char **env)
 {
 	int	len;
 
 	if (!cmd || !lst_env)
 		return ;
 	len = cmd[0].cmd_len;
-
 	if (len == 1)
 	{
 		exec_cmd(&cmd[0], lst_env, env);

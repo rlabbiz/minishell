@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins1.c                                        :+:      :+:    :+:   */
+/*   get_the_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 16:30:22 by ael-amin          #+#    #+#             */
-/*   Updated: 2023/06/19 10:57:58 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/19 19:42:55 by ael-amin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ int	env_is_valid(t_list *lst, char *name)
 
 t_env	*get_line_of_env(t_list **lst, char *line)
 {
-	t_env	*env;
 	int		i;
-	char *str = line;
+	t_env	*env;
+	char	*str;
 
+	i = ((str = line), 0);
 	env = malloc(sizeof(t_env));
-	i = 0;
 	if (str[i] && (ft_isdigit(str[i]) || str[i] == '='))
 	{
 		printf("bash: export: `%s': not a valid identifier\n", str);
@@ -56,7 +56,7 @@ t_env	*get_line_of_env(t_list **lst, char *line)
 		{
 			env->value = ft_substr(str, 0, ft_strlen(str));
 			if (!env->value)
-				return (NULL);	
+				return (NULL);
 		}
 	}
 	if (get_env_value(*lst, env->name))
@@ -90,7 +90,8 @@ void	unset_env(t_list **lst, char *name)
 	prive = node;
 	if (name && name[0] && ft_isdigit(name[0]))
 		printf("minishell: unset: `%s': not a valid identifier\n", name);
-	if (ft_strncmp(env->name, name, ft_strlen(env->name)) == 0 && ft_strlen(env->name) == ft_strlen(name))
+	if (ft_strncmp(env->name, name, ft_strlen(env->name)) == 0
+		&& ft_strlen(env->name) == ft_strlen(name))
 	{
 		*lst = node->next;
 		ft_lstdelone(node, free_env);
@@ -100,7 +101,8 @@ void	unset_env(t_list **lst, char *name)
 	{
 		env = node->content;
 		next = node->next;
-		if (ft_strncmp(env->name, name, ft_strlen(env->name)) == 0 && ft_strlen(env->name) == ft_strlen(name))
+		if (ft_strncmp(env->name, name, ft_strlen(env->name)) == 0
+			&& ft_strlen(env->name) == ft_strlen(name))
 		{
 			prive->next = node->next;
 			ft_lstdelone(node, free_env);
@@ -110,4 +112,3 @@ void	unset_env(t_list **lst, char *name)
 		node = next;
 	}
 }
-

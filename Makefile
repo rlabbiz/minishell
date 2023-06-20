@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+         #
+#    By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 05:18:06 by rlabbiz           #+#    #+#              #
-#    Updated: 2023/06/19 12:00:29 by rlabbiz          ###   ########.fr        #
+#    Updated: 2023/06/19 17:20:55 by ael-amin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror# -fsanitize=address -g 
+CFLAGS = -Wall -Wextra -Werror# -fsanitize=address -g
 OBJECT = minishell_ultis.o \
 		 check_args.o \
 		 prompt.o \
@@ -22,10 +22,12 @@ OBJECT = minishell_ultis.o \
 		 parser/analyzer.o \
 		 parser/parser.o \
 		 builtins/get_the_env.o \
+		 builtins/builtins1.o \
 		 builtins/builtins2.o \
 		 builtins/main_builtins.o \
-		 builtins/utils_builtins.o \
+		 builtins/utils_env.o \
 		 execution/exec.o \
+		 execution/case_builtins.o \
 		 parser/parser_ultis.o \
 		 parser/redirection.o \
 		 parser/herdoc.o \
@@ -46,10 +48,10 @@ $(LIBFT):
 	@make -C libft
 
 $(NAME): $(MAIN_FILE) $(OBJECT) $(DEPS) $(LIBFT)
-	@$(CC) $(CFLAGS) -L/Users/rlabbiz/.brew/opt/readline/lib -I /Users/rlabbiz/.brew/opt/readline/include -lreadline $(OBJECT) $(LIBFT) $(MAIN_FILE) -o $(NAME)
+	@$(CC) $(CFLAGS) -L/Users/ael-amin/.brew/opt/readline/lib -I /Users/ael-amin/.brew/opt/readline/include -lreadline $(OBJECT) $(LIBFT) $(MAIN_FILE) -o $(NAME)
 	@echo "\t The $(NAME) is created. "
 
-# @$(CC) $(CFLAGS) -L/Users/ael-amin/.brew/opt/readline/lib -I /Users/ael-amin/.brew/opt/readline/include -lreadline $(OBJECT) $(LIBFT) $(MAIN_FILE) -o $(NAME)
+# @$(CC) $(CFLAGS) -L/Users/rlabbiz/.brew/opt/readline/lib -I /Users/rlabbiz/.brew/opt/readline/include -lreadline $(OBJECT) $(LIBFT) $(MAIN_FILE) -o $(NAME)
 
 .PHONY: all re clean fclean
 

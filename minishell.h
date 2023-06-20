@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:50 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/19 13:45:22 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/19 16:45:58 by ael-amin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,10 +114,10 @@ void	check_quotes_supp(char *input, int *i, int *quotes);
 int		find_qoutes_supp(char *str, int i, int *quotes);
 char	*ft_chardup(char c);
 t_list	*write_expantion_on_lst(t_list *lst_env, char *str);
-char *expantion(char *str, t_list *lst_env, int check);
+char	*expantion(char *str, t_list *lst_env, int check);
 t_list *join_arr_to_lst(char **args);
-char **join_lst_to_arr(t_list *lst);
-void expand(t_cmd **list, t_list *lst_env);
+char	**join_lst_to_arr(t_list *lst);
+void	expand(t_cmd **list, t_list *lst_env);
 
 // build-in ---- env
 t_env	*get_line_of_env(t_list **lst, char *str);
@@ -134,10 +134,12 @@ int		exec_env(t_cmd cmd, t_list **lst_env);
 int		exec_export(t_cmd cmd, t_list **lst_env);
 int		exec_unset(t_cmd cmd, t_list **lst_env);
 int		builtins(t_cmd *cmd, t_list **lst_env);
-void	exec_cmd(t_cmd *cmd, t_list **lst_env, char **env);
-void	pipeline(t_cmd	*cmd, t_list **lst_env);
 
 // execution
 void	exec(t_cmd *cmd, t_list **lst_env, char **env);
+void	exec_cmd(t_cmd *cmd, t_list **lst_env, char **env);
+void	pipeline(t_cmd	*cmd, t_list **lst_env);
+int		cmd_in_parent(t_cmd *cmd, t_list **lst_env);
+int		is_builtins(char *cmd);
 
 #endif

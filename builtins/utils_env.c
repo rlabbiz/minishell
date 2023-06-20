@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_builtins.c                                   :+:      :+:    :+:   */
+/*   utils_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 20:25:14 by ael-amin          #+#    #+#             */
-/*   Updated: 2023/06/19 11:07:28 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/19 17:23:18 by ael-amin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,7 @@ char	*get_env_value(t_list *lst, char *name) // name return value
 		if (ft_strlen(name) == ft_strlen(env->name))
 		{
 			if (ft_strncmp(env->name, name, ft_strlen(name)) == 0)
-			{
 				return (env->value);
-				
-			}
-			
 		}
 		node = node->next;
 	}

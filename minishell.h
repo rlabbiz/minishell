@@ -6,7 +6,7 @@
 /*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:50 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/19 16:45:58 by ael-amin         ###   ########.fr       */
+/*   Updated: 2023/06/21 17:54:53 by ael-amin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,5 +141,8 @@ void	exec_cmd(t_cmd *cmd, t_list **lst_env, char **env);
 void	pipeline(t_cmd	*cmd, t_list **lst_env);
 int		cmd_in_parent(t_cmd *cmd, t_list **lst_env);
 int		is_builtins(char *cmd);
+
+void	execute(t_cmd *cmd, t_list **env, char **e);
+int	get_last_status(void);
 
 #endif

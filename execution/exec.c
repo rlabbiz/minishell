@@ -6,7 +6,7 @@
 /*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 11:04:22 by ael-amin          #+#    #+#             */
-/*   Updated: 2023/06/19 20:27:57 by ael-amin         ###   ########.fr       */
+/*   Updated: 2023/06/20 19:39:39 by ael-amin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void	pipeline(t_cmd	*cmd, t_list **lst_env)
 	int		pipefd[2];
 	int		*pid;
 	char	*check;
-	int		tmp = 0;
+	int		tmp = pipefd[0];
 	int		i;
 	int		len;
 
@@ -134,6 +134,7 @@ void	pipeline(t_cmd	*cmd, t_list **lst_env)
 			pid[i] = fork();
 			if (pid[i] == 0)
 			{
+				// close(pipefd[1]);
 				dup2(tmp, 0);
 				if (i < len - 1)
 				{

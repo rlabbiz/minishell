@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlabbiz <rlabbiz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 05:10:47 by rlabbiz           #+#    #+#             */
-/*   Updated: 2023/06/19 15:49:41 by rlabbiz          ###   ########.fr       */
+/*   Updated: 2023/06/21 17:57:39 by ael-amin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,7 @@ int	main(int ac, char **av, char **env)
 	signal(SIGINT, handler);
 	while (line)
 	{
+		printf("status: %d\n", get_last_status());
 		list = NULL;
 		// cmd = NULL;
 		add_history(line);
@@ -160,7 +161,8 @@ int	main(int ac, char **av, char **env)
 				if (cmd)
 				{
 					print(cmd);
-					exec(cmd, &lst_env, env);
+					// exec(cmd, &lst_env, env);
+					execute(cmd, &lst_env, env);
 					ft_free_cmd(cmd);
 				}
 			}

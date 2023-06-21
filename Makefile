@@ -6,7 +6,7 @@
 #    By: ael-amin <ael-amin@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 05:18:06 by rlabbiz           #+#    #+#              #
-#    Updated: 2023/06/19 17:20:55 by ael-amin         ###   ########.fr        #
+#    Updated: 2023/06/21 16:01:51 by ael-amin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ OBJECT = minishell_ultis.o \
 		 builtins/main_builtins.o \
 		 builtins/utils_env.o \
 		 execution/exec.o \
+		 execution/second_exec.o \
 		 execution/case_builtins.o \
 		 parser/parser_ultis.o \
 		 parser/redirection.o \
